@@ -10,6 +10,7 @@
 // bar items. The first one is selected.](https://flutter.github.io/assets-for-api-docs/assets/material/bottom_navigation_bar.png)
 
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import './layouts/event/event_widget.dart';
 import './layouts/search/search_widget.dart';
@@ -17,7 +18,9 @@ import './layouts/profile/profile_widget.dart';
 import './layouts/crous_info/crous_info_widget.dart';
 
 
-void main() => runApp(MyApp());
+void main() {
+	initializeDateFormatting().then((_) => runApp(MyApp()));
+}
 
 /// This Widget is the main application widget.
 class MyApp extends StatelessWidget {
@@ -69,16 +72,16 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   }
 
 	final List<Widget> _widgetLayout = [
-		ProfileWidget,
-		SearchWidget,
-		EventWidget,
-		CrousInfoWidget,
-	]
+		ProfileWidget(),
+		SearchWidget(),
+		EventWidget(),
+		CrousInfoWidget('hey'),
+	];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BottomNavigationBar Sample'),
+        title: const Text('Artem App Sample'),
       ),
       body: Center(
         child: _widgetLayout.elementAt(_selectedIndex),
@@ -86,24 +89,24 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Profile'),
+            icon: Icon(Icons.account_circle),
+            title: Text('Profil'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.search),
             title: Text('Recherche'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
+            icon: Icon(Icons.event_note),
             title: Text('Evènements'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            title: Text('Services'),
+            icon: Icon(Icons.info),
+            title: Text('Informations'),
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Colors.pink,
         onTap: _onItemTapped,
 	      iconSize: 20.0,
 	      unselectedFontSize: 15,
