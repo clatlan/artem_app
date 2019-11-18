@@ -7,6 +7,7 @@ import './profile_info_delete_button.dart';
 import '../../services/models/user.dart';
 //import '../../services/models/school.dart';
 import '../../services/models/data_factory.dart';
+import '../../services/auth_service.dart';
 
 
 
@@ -23,13 +24,14 @@ class ProfileWidget extends StatefulWidget {
 class ProfileState extends State<ProfileWidget> {
 
   Future<User> user;
+  final authService = AuthService();
 
 
   @override
   void initState() {
     super.initState();
     final dataFactory = DataFactory();
-    user = dataFactory.fetchUser(1);
+    user = dataFactory.fetchUser(authService.currentUser());
   }
 
   @override

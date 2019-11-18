@@ -16,10 +16,14 @@ import './layouts/event/event_widget.dart';
 import './layouts/search/search_widget.dart';
 import './layouts/profile/profile_widget.dart';
 import './layouts/crous_info/crous_info_widget.dart';
+import './services/auth_service.dart';
 
 
 void main() {
-	initializeDateFormatting().then((_) => runApp(MyApp()));
+  final auth = AuthService();
+  auth.updateHotJwt().then(
+    (_) => initializeDateFormatting().then((_) => runApp(MyApp()))
+  );
 }
 
 /// This Widget is the main application widget.
