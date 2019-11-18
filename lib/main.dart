@@ -72,7 +72,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   }
 
 	final List<Widget> _widgetLayout = [
-		ProfileWidget(),
+    ProfileWidget(),
 		SearchWidget(),
 		EventWidget(),
 		CrousInfoWidget('hey'),
