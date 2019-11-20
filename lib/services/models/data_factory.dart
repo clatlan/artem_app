@@ -25,8 +25,8 @@ class DataFactory {
 
   Future<List<User>> fetchUsers({startsWith = ''}) async {
     final response = await http.get(
-      globals.endpoint + '/api/v1/users',
-      headers: {'Authorization': auth.jwt(), 'starts_with': startsWith},
+      globals.endpoint + '/api/v1/users?starts_with='+startsWith,
+      headers: {'Authorization': auth.jwt()},
     );
 
     if (response.statusCode == 200) {
