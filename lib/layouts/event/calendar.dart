@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class Calendar extends StatefulWidget {
@@ -179,6 +178,7 @@ class DayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  	print('Jai la chiasse');
     return Container(
       margin: EdgeInsets.all(10),
       child: Text(
