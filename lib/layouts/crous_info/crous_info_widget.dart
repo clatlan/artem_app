@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../services/auth_service.dart';
 
 class CrousInfoWidget extends StatelessWidget {
 	final String name;
@@ -7,7 +8,9 @@ class CrousInfoWidget extends StatelessWidget {
 
 	@override
 	Widget build(BuildContext context) {
-    return Container(
+		final auth = AuthService();
+		auth.login('a.bouzigues@outlook.fr', 'SLGHNPFV');
+		return Container(
 	    color: Colors.blue,
 		    child: Text('CrousInfoWidget')
 	    );

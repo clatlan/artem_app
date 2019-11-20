@@ -34,6 +34,13 @@ class ProfileState extends State<ProfileWidget> {
     user = dataFactory.fetchUser(authService.currentUser());
   }
 
+  Widget associationInfo (User user) {
+    final plural = user.roles.length > 1 ? 1 : 0;
+    final label = "Association" + "s" * (plural);
+    final content = user.unionsString();
+    return ProfileInfo(label, content);
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<User>(
@@ -91,7 +98,7 @@ class ProfileState extends State<ProfileWidget> {
                                   ProfileInfo("Prénom", snapshot.data.firstName),
                                   ProfileInfo("Ecole", snapshot.data.school.name),
                                   ProfileInfo("Promotion", snapshot.data.yearEntered.toString()),
-                                  ProfileInfo("Association", "BDE"),
+                                  associationInfo(snapshot.data)
                                 ],
                               ),
                               ProfileInfoUpdateButton(),

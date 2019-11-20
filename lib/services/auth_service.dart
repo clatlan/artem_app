@@ -1,4 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+import 'variables.dart' as globals;
+
 import 'dart:convert';
 
 class AuthService {
@@ -25,6 +28,23 @@ class AuthService {
     token = receivedToken;
     authenticatedUserId = parseJwt(receivedToken)['user_id'];
     storage.write(key: 'artem_app_jwt', value: receivedToken);
+  }
+
+  void login(String email, String validationCode) async {
+    var response = await http.post(globals.endpoint + '/authenticate',
+      body: {
+        'email': email,
+        'validation_code': validationCode
+      },
+    );
+    if (response.statusCode == 200) {
+      var jwt = json.decode(response.body)['auth_token'];
+      saveJwtToHotAndColdStorage(jwt);
+    } else {
+      // If that call was not successful, throw an error.
+      throw Exception(globals.standardErrorMessage);
+    }
+
   }
 
 

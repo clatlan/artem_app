@@ -116,6 +116,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 	      unselectedFontSize: 15,
 	      type: BottomNavigationBarType.fixed,
       ),
+        resizeToAvoidBottomPadding: false
     );
   }
 }
+
+

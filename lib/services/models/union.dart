@@ -15,8 +15,11 @@ class Union {
 
     return Union(
       id: json['id'],
-      name: json['first_name'],
+      name: json['name'],
       school: School.fromJson(json['school'])
     );
+  }
+  String fullName() {
+    return this.name + ' ' + this.school.name;
   }
 }
