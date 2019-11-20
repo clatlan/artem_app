@@ -20,22 +20,25 @@ class ForeGround extends StatefulWidget {
 class ForeGroundState extends State<ForeGround> {
   String searchQuery;
   final searchText = TextEditingController();
+  final dataFactory = DataFactory();
+  Future<List<User>> users;
 
   @override
   void initState() {
     super.initState();
-    searchText.addListener(() => setState(() => searchQuery = searchText.text));
+    searchText.addListener(() => setState(() => null));
   }
 
   @override
   Widget build(BuildContext context) {
+    users = dataFactory.fetchUsers(startsWith: searchText.text);
     return Column(
       children: <Widget>[
         Container(
           margin: EdgeInsets.all(20),
           child: SearchBar(searchText: searchText),
         ),
-        Expanded(child: SearchResult(searchQuery: searchQuery))
+        Expanded(child: SearchResult(users: users))
       ],
     );
   }
@@ -44,6 +47,7 @@ class ForeGroundState extends State<ForeGround> {
 class SearchBar extends StatelessWidget {
   final searchText;
 
+
   SearchBar({Key key, @required this.searchText}) : super(key: key);
 
   @override
@@ -51,11 +55,12 @@ class SearchBar extends StatelessWidget {
     return Container(
         alignment: Alignment.topCenter,
         child: ClipRect(
-            child: TextField(
+          child: TextField(
             controller: searchText,
             decoration: InputDecoration(
               hintText: "Etudiants, Associations ou évènements",
-                hintStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              hintStyle:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               prefixIcon: Icon(Icons.search),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(25.0)),
@@ -80,15 +85,13 @@ class SearchBar extends StatelessWidget {
 }
 
 class SearchResult extends StatelessWidget {
-  final String searchQuery;
+  final Future<List<User>> users;
 
-  SearchResult({Key key, @required this.searchQuery}) : super(key: key);
+  SearchResult({Key key, @required this.users}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final dataFactory = DataFactory();
-    final Future<List<User>> users =
-        dataFactory.fetchUsers(startsWith: searchQuery);
+
     return FutureBuilder(
       future: users,
       builder: (context, snapshot) {
