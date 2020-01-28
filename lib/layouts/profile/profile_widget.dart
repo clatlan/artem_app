@@ -54,7 +54,7 @@ class ProfileState extends State<ProfileWidget> {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(0.1), BlendMode.dstATop),
+                          Colors.black.withOpacity(0.05), BlendMode.dstATop),
                       image: AssetImage("assets/images/logoMINES.jpg"),
 //                fit: BoxFit.cover,
                     ),

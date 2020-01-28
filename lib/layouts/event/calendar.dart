@@ -1,3 +1,5 @@
+import 'package:artem_app/services/models/data_factory.dart';
+import 'package:artem_app/services/models/event.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -6,24 +8,37 @@ class Calendar extends StatefulWidget {
   _MyCalendarState createState() => new _MyCalendarState();
 }
 
+Map<DateTime, List<dynamic>> prepareEvents(List<Event> events) {
+  Map<DateTime, List<dynamic>> eventJson = {};
+  for (var i = 0; i < events.length; i++) {
+    var eventDate = events[i].timeStart;
+    var jsonKey = DateTime(eventDate.year, eventDate.month, eventDate.day);
+    if (eventJson.containsKey(jsonKey)) {
+      eventJson[jsonKey].add(events[i].name);
+    } else {
+      eventJson[jsonKey] = [events[i].name];
+    }
+  }
+  print(eventJson);
+  return eventJson;
+}
+
 class _MyCalendarState extends State<Calendar> {
-  Map<DateTime, List> _events;
+  Future <List<Event>> _events;
   List _selectedEvents;
   DateTime _selectedDay;
   CalendarController _calendarController;
+  final dataFactory = DataFactory();
 
   @override
   void initState() {
     super.initState();
 
+
     final _todayDay = DateTime.now();
 
-    _events = {
-      DateTime(2019, 11, 16): ['Sarass', 'Sarass2', 'Sarass3'],
-      DateTime(2019, 11, 17): ['Croques'],
-    };
-
-    _selectedEvents = _events[_todayDay] ?? [];
+    _events = dataFactory.fetchEvents();
+    _selectedEvents = [];
 
     _calendarController = CalendarController();
   }
@@ -64,72 +79,88 @@ class _MyCalendarState extends State<Calendar> {
   }
 
   Widget _buildTableCalendar() {
-    return TableCalendar(
-      locale: 'fr_FR',
-      events: _events,
-      calendarController: _calendarController,
-      holidays: _holidays,
-      startingDayOfWeek: StartingDayOfWeek.monday,
-      availableGestures: AvailableGestures.none,
-      availableCalendarFormats: const {CalendarFormat.month: 'Month'},
-      calendarStyle: CalendarStyle(
-        weekdayStyle: TextStyle(color: Colors.blue),
-        weekendStyle: TextStyle(color: Colors.pink),
-        outsideStyle: TextStyle(color: Colors.grey),
-        unavailableStyle: TextStyle(color: Colors.yellow),
-        outsideWeekendStyle: TextStyle(color: Colors.grey),
-      ),
-      daysOfWeekStyle: DaysOfWeekStyle(
+    return FutureBuilder(
+        future: _events,
+        builder: (context, snapshot) {
+          Map<DateTime, List<dynamic>> formattedEvents;
+          if (snapshot.hasData) {
+            formattedEvents = prepareEvents(snapshot.data);
+          }
+          else {
+            formattedEvents = Map<DateTime, List<dynamic>>.from({});
+          }
+          print(formattedEvents);
+
+          return TableCalendar(
+            locale: 'fr_FR',
+            events: Map<DateTime, List<dynamic>>.from(formattedEvents),
+            calendarController: _calendarController,
+            holidays: _holidays,
+            startingDayOfWeek: StartingDayOfWeek.monday,
+            availableGestures: AvailableGestures.none,
+            availableCalendarFormats: const {CalendarFormat.month: 'Month'},
+            calendarStyle: CalendarStyle(
+              weekdayStyle: TextStyle(color: Colors.blue),
+              weekendStyle: TextStyle(color: Colors.pink),
+              outsideStyle: TextStyle(color: Colors.grey),
+              unavailableStyle: TextStyle(color: Colors.yellow),
+              outsideWeekendStyle: TextStyle(color: Colors.grey),
+            ),
+            daysOfWeekStyle: DaysOfWeekStyle(
 //        dowTextBuilder: (date, locale) {
 //          return DateFormat.E(locale)
 //              .format(date)
 //              .substring(0, 3)
 //              .toUpperCase();
 //        },
-        weekdayStyle: TextStyle(color: Colors.blue),
-        weekendStyle: TextStyle(color: Colors.pink),
-      ),
-      headerVisible: true,
-      builders: CalendarBuilders(
-        markersBuilder: (context, date, events, holidays) {
-          return [
-            Container(
-              decoration: new BoxDecoration(
-                color: Colors.black,
-                shape: BoxShape.circle,
-              ),
-              margin: const EdgeInsets.all(4.0),
-              width: 4,
-              height: 4,
-            )
-          ];
-        },
-        selectedDayBuilder: (context, date, _) {
-          return Container(
-            decoration: new BoxDecoration(
-              color: Colors.pink,
-              shape: BoxShape.circle,
+              weekdayStyle: TextStyle(color: Colors.blue),
+              weekendStyle: TextStyle(color: Colors.pink),
             ),
-            margin: const EdgeInsets.all(4.0),
-            width: 100,
-            height: 100,
-            child: Center(
-              child: Text(
-                '${date.day}',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.white,
-                ),
-              ),
+            headerVisible: true,
+            builders: CalendarBuilders(
+              markersBuilder: (context, date, events, holidays) {
+                return [
+                  Container(
+                    decoration: new BoxDecoration(
+                      color: Colors.black,
+                      shape: BoxShape.circle,
+                    ),
+                    margin: const EdgeInsets.all(4.0),
+                    width: 4,
+                    height: 4,
+                  )
+                ];
+              },
+              selectedDayBuilder: (context, date, _) {
+                return Container(
+                  decoration: new BoxDecoration(
+                    color: Colors.pink,
+                    shape: BoxShape.circle,
+                  ),
+                  margin: const EdgeInsets.all(4.0),
+                  width: 100,
+                  height: 100,
+                  child: Center(
+                    child: Text(
+                      '${date.day}',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
+            onDaySelected: (_, events) {
+              _onDaySelected(events);
+            },
+            onVisibleDaysChanged: null,
           );
-        },
-      ),
-      onDaySelected: (_, events) {
-        _onDaySelected(events);
-      },
-      onVisibleDaysChanged: null,
+        }
+
     );
+
   }
 
   Widget _buildEventList() {

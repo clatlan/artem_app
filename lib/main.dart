@@ -9,6 +9,9 @@
 // ![A scaffold with a bottom navigation bar containing three bottom navigation
 // bar items. The first one is selected.](https://flutter.github.io/assets-for-api-docs/assets/material/bottom_navigation_bar.png)
 
+import 'package:artem_app/layouts/login_page/login_page.dart';
+
+
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -18,17 +21,16 @@ import './layouts/profile/profile_widget.dart';
 import './layouts/crous_info/crous_info_widget.dart';
 import './services/auth_service.dart';
 
-
 void main() {
   final auth = AuthService();
-  auth.updateHotJwt().then(
-    (_) => initializeDateFormatting().then((_) => runApp(MyApp()))
-  );
+  auth
+      .updateHotJwt()
+      .then((_) => initializeDateFormatting().then((_) => runApp(MyApp())));
 }
 
 /// This Widget is the main application widget.
 class MyApp extends StatelessWidget {
-  static const String _title = 'Flutter Code Sample';
+  static const String _title = 'Artem App';
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +49,7 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 2;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
@@ -75,50 +77,45 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     });
   }
 
-	final List<Widget> _widgetLayout = [
+  final List<Widget> _widgetLayout = [
     ProfileWidget(),
-		SearchWidget(),
-		EventWidget(),
-		CrousInfoWidget('hey'),
-	];
+    SearchWidget(),
+    EventWidget(),
+    CrousInfoWidget('hey'),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Artem App Sample'),
-      ),
-      body: Center(
-        child: _widgetLayout.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            title: Text('Profil'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            title: Text('Recherche'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.event_note),
-            title: Text('Evènements'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.info),
-            title: Text('Informations'),
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.pink,
-        onTap: _onItemTapped,
-	      iconSize: 20.0,
-	      unselectedFontSize: 15,
-	      type: BottomNavigationBarType.fixed,
-      ),
-        resizeToAvoidBottomPadding: false
-    );
+        body: Center(
+          child: _widgetLayout.elementAt(_selectedIndex),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle),
+              title: Text('Profil'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.search),
+              title: Text('Recherche'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.event_note),
+              title: Text('Evènements'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.info),
+              title: Text('Informations'),
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.pink,
+          onTap: _onItemTapped,
+          iconSize: 20.0,
+          unselectedFontSize: 15,
+          type: BottomNavigationBarType.fixed,
+        ),
+        resizeToAvoidBottomPadding: false);
   }
 }
-
-

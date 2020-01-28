@@ -1,3 +1,4 @@
+import 'package:artem_app/layouts/common/background.dart';
 import 'package:artem_app/services/models/data_factory.dart';
 import 'package:artem_app/services/models/user.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +39,7 @@ class ForeGroundState extends State<ForeGround> {
           margin: EdgeInsets.all(20),
           child: SearchBar(searchText: searchText),
         ),
-        Expanded(child: SearchResult(users: users))
+        SearchResult(users: users)
       ],
     );
   }
@@ -47,14 +48,15 @@ class ForeGroundState extends State<ForeGround> {
 class SearchBar extends StatelessWidget {
   final searchText;
 
-
   SearchBar({Key key, @required this.searchText}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        alignment: Alignment.topCenter,
-        child: ClipRect(
+    return BackdropFilter(
+        filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+        child: Container(
+            child: Container(
+          alignment: Alignment.topCenter,
           child: TextField(
             controller: searchText,
             decoration: InputDecoration(
@@ -80,7 +82,7 @@ class SearchBar extends StatelessWidget {
               ),
             ),
           ),
-        ));
+        )));
   }
 }
 
@@ -91,25 +93,27 @@ class SearchResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return FutureBuilder(
       future: users,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return ListView.separated(
+          return Expanded(
+              child: ListView.separated(
             padding: const EdgeInsets.all(8),
             itemCount: snapshot.data.length,
             itemBuilder: (BuildContext context, int index) =>
                 ResultEntry(user: snapshot.data[index]),
             separatorBuilder: (BuildContext context, int index) =>
                 const Divider(),
-          );
+          ));
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
-
         // By default, show a loading spinner.
-        return CircularProgressIndicator();
+        return Center(
+            child: Container(
+                alignment: Alignment(0.0, 0.0),
+                child: CircularProgressIndicator()));
       },
     );
   }
@@ -175,16 +179,3 @@ class TextWithPadding extends StatelessWidget {
   }
 }
 
-class Background extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("assets/images/BlurArtem.jpg"),
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
-  }
-}

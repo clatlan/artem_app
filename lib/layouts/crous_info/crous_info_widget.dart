@@ -1,3 +1,4 @@
+import 'package:artem_app/layouts/login_page/login_page.dart';
 import 'package:flutter/material.dart';
 import '../../services/auth_service.dart';
 
@@ -8,11 +9,7 @@ class CrousInfoWidget extends StatelessWidget {
 
 	@override
 	Widget build(BuildContext context) {
-		final auth = AuthService();
-		auth.login('a.bouzigues@outlook.fr', 'SLGHNPFV');
-		return Container(
-	    color: Colors.blue,
-		    child: Text('CrousInfoWidget')
-	    );
+
+		return LoginPage();
   }
 }
