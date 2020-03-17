@@ -9,23 +9,16 @@
 // ![A scaffold with a bottom navigation bar containing three bottom navigation
 // bar items. The first one is selected.](https://flutter.github.io/assets-for-api-docs/assets/material/bottom_navigation_bar.png)
 
-import 'package:artem_app/layouts/login_page/login_page.dart';
-
-
 import 'package:flutter/material.dart';
+
 import 'package:intl/date_symbol_data_local.dart';
 
-import './layouts/event/event_widget.dart';
-import './layouts/search/search_widget.dart';
-import './layouts/profile/profile_widget.dart';
-import './layouts/crous_info/crous_info_widget.dart';
+import 'package:artem_app/layouts/home.dart';
+import 'package:artem_app/layouts/login_page/login_page.dart';
 import './services/auth_service.dart';
 
 void main() {
-  final auth = AuthService();
-  auth
-      .updateHotJwt()
-      .then((_) => initializeDateFormatting().then((_) => runApp(MyApp())));
+  initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
 /// This Widget is the main application widget.
@@ -34,88 +27,67 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: _title,
-      home: MyStatefulWidget(),
-    );
+    return GestureDetector(
+        onTap: () {
+          keyboardManagement(context);
+        },
+        child: MaterialApp(
+          title: _title,
+          home: StateProvider(),
+        ));
   }
 }
 
-class MyStatefulWidget extends StatefulWidget {
-  MyStatefulWidget({Key key}) : super(key: key);
+void keyboardManagement(context) {
+  FocusScopeNode currentFocus = FocusScope.of(context);
 
-  @override
-  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
+  if (!currentFocus.hasPrimaryFocus) {
+    currentFocus.unfocus();
+  }
 }
 
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  int _selectedIndex = 2;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Profile',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Recherche',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: Evènements',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 3: Services',
-      style: optionStyle,
-    ),
-  ];
+class StateProvider extends StatefulWidget {
+  StateProvider({Key key}) : super(key: key);
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
+  @override
+  StateProviderState createState() => StateProviderState();
+}
+
+class StateProviderState extends State<StateProvider> {
+  bool checkLoginFinished = false;
+  bool isLoggedIn;
+  AuthService authService = AuthService();
+
+  void checkLogin() {
+    authService.isLoggedIn().then((returnedIsLoggedIn) {
+      setState(() {
+        isLoggedIn = returnedIsLoggedIn;
+      });
+    }).whenComplete(() {
+      setState(() {
+        checkLoginFinished = true;
+      });
     });
   }
 
-  final List<Widget> _widgetLayout = [
-    ProfileWidget(),
-    SearchWidget(),
-    EventWidget(),
-    CrousInfoWidget('hey'),
-  ];
+  void loginCallback() {
+    setState(() {
+      this.isLoggedIn = true;
+    });
+  }
+
+  Widget displayPage() {
+    if (!checkLoginFinished) {
+      checkLogin();
+      return Container(width: 200, child: CircularProgressIndicator());
+    }
+    print(authService.jwt());
+    print(isLoggedIn);
+    return isLoggedIn ? HomePage() : LoginPage(this.loginCallback);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-          child: _widgetLayout.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
-              title: Text('Profil'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              title: Text('Recherche'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.event_note),
-              title: Text('Evènements'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.info),
-              title: Text('Informations'),
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.pink,
-          onTap: _onItemTapped,
-          iconSize: 20.0,
-          unselectedFontSize: 15,
-          type: BottomNavigationBarType.fixed,
-        ),
-        resizeToAvoidBottomPadding: false);
+    return displayPage();
   }
 }

@@ -1,18 +1,26 @@
-import
-'dart:ui';
+import 'dart:ui';
 
-import 'package:artem_app/services/models/school.dart';
+import 'package:artem_app/layouts/login_page/sign_up_form.dart';
+import 'package:artem_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:artem_app/layouts/common/background.dart';
-
 import 'forms.dart';
 import 'login_painter.dart';
 
-bool emailValid(email) {
+bool emailParsingCorrect(email) {
   List<String> splitMail = email.split('@');
-  if (splitMail.length == 1) {
+  print(splitMail);
+  if (splitMail.length != 2) {
     return false;
   }
+  if (splitMail[0] == '' || splitMail[1] == '') {
+    return false;
+  }
+  return true;
+}
+
+bool emailProviderCorrect(email) {
+  List<String> splitMail = email.split('@');
   String provider = splitMail[splitMail.length - 1];
   if (provider == 'etu.univ-lorraine.fr') {
     return true;
@@ -24,45 +32,30 @@ bool emailValid(email) {
 }
 
 class LoginPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        Background(),
-        FrostedGlassLoginContainer(),
-        ForeGround(),
-      ],
-    );
-  }
-}
+  Function loginCallback;
 
-class AcceptButton extends StatelessWidget {
-  final formKey;
-
-  const AcceptButton({Key key, this.formKey}) : super(key: key);
+  LoginPage(this.loginCallback);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: RaisedButton(
-          onPressed: () {
-            if (formKey.currentState.validate()) {
-              formKey.currentState.reset();
-              // If the form is valid, display a Snackbar.
-              Scaffold.of(context)
-                  .showSnackBar(SnackBar(content: Text('Adresse acceptée')));
-            }
-          },
-          color: Colors.grey,
-          shape: RoundedRectangleBorder(
-            borderRadius: new BorderRadius.circular(18.0),
-          ),
-          child: Text('Suivant', style: TextStyle(color: Colors.white))),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Stack(
+        children: <Widget>[
+          Background(),
+          FrostedGlassLoginContainer(),
+          ForeGround(this.loginCallback),
+        ],
+      ),
     );
   }
 }
 
 class ForeGround extends StatelessWidget {
+  Function loginCallback;
+
+  ForeGround(this.loginCallback);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -72,7 +65,7 @@ class ForeGround extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              LoginForm(),
+              LoginForm(this.loginCallback),
             ],
           )
         ],
@@ -82,62 +75,55 @@ class ForeGround extends StatelessWidget {
 }
 
 class LoginForm extends StatefulWidget {
-  String email;
+  Function loginCallback;
+
+  LoginForm(this.loginCallback);
 
   @override
-  _LoginFormState createState() => _LoginFormState();
+  _LoginFormState createState() => _LoginFormState(this.loginCallback);
 }
 
 class _LoginFormState extends State<LoginForm> {
+  Function loginCallback;
+
+  _LoginFormState(this.loginCallback);
+
+  final authService = AuthService();
   final _formKey = GlobalKey<FormState>();
   String email;
-  String firstName;
-  String lastName;
-  School school;
-  int yearEntered;
   double containerWidth;
   String confirmationCode;
+  bool needsSignUp;
+  bool emailCheckupDone;
 
   String emailValidator(value) {
-    if (!emailValid(value)) {
+    if (!emailParsingCorrect(value)) {
+      return 'Format incorrect';
+    }
+    if (!emailProviderCorrect(value)) {
       return 'Utilise ton univ-lorraine ou my-icn';
     }
-    setState(() {
-      email = value;
+    authService.doesEmailExist(value).then((doesEmailExist) {
+      setState(() {
+        needsSignUp = !doesEmailExist;
+        email = value;
+      });
+    }).whenComplete(() {
+      setState(() {
+        emailCheckupDone = true;
+      });
     });
     return null;
   }
 
-  String firstNameValidator(value) {
-    if (value == '') {
-      return 'Entre ton prénom';
+  String confirmationCodeValidator(value) {
+    if (value != '') {
+      setState(() {
+        confirmationCode = value;
+      });
+      return null;
     }
-    setState(() {
-      firstName = value;
-    });
-    return null;
-  }
-
-  String lastNameValidator(value) {
-    if (value == '') {
-      return 'Entre ton nom';
-    }
-    setState(() {
-      lastName = value;
-    });
-    return null;
-  }
-
-  String yearEnteredValidator(value) {
-    int parsedValue = int.tryParse(value);
-
-    if (parsedValue == null || parsedValue > 1980 && parsedValue < 2100) {
-      return 'Entre une année valide';
-    }
-    setState(() {
-      yearEntered = value;
-    });
-    return null;
+    return 'Rentre le code reçu par email';
   }
 
   @override
@@ -145,20 +131,25 @@ class _LoginFormState extends State<LoginForm> {
     super.initState();
     containerWidth = 200;
     email = '';
-    lastName = '';
-    firstName = '';
-    yearEntered = -1;
+    confirmationCode = '';
+    emailCheckupDone = false;
+    needsSignUp = false;
     confirmationCode = '';
   }
 
   List<Widget> renderFormField() {
     if (email == '') {
-      return renderEmailForm(emailValidator);
-    } else if (lastName == '' && firstName == '' && yearEntered == -1) {
-      return renderUserForm(
-          [firstNameValidator, lastNameValidator, yearEnteredValidator]);
+      return renderEmailForm([emailValidator]);
+    } else if (needsSignUp) {
+      return [SignUpForm(email: email)];
+    } else if (confirmationCode == '') {
+      authService.requestConfirmationCode(email);
+      return renderLoginForm(email, confirmationCodeValidator);
     }
-    return renderSchoolSelector();
+    authService.login(email, confirmationCode);
+    this.loginCallback();
+    return [CircularProgressIndicator()];
+
   }
 
   @override

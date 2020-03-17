@@ -5,7 +5,35 @@ School icn = School(id: -1, name: 'ICN Buisness School');
 School mines = School(id: -1, name: 'Mines');
 School ensad = School(id: -1, name: 'Ensad');
 
-List<Widget> renderEmailForm(validator) {
+
+class AcceptButton extends StatelessWidget {
+  final formKey;
+
+  const AcceptButton({Key key, this.formKey}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: RaisedButton(
+          onPressed: () {
+            if (formKey.currentState.validate()) {
+              formKey.currentState.reset();
+              // If the form is valid, display a Snackbar.
+              Scaffold.of(context)
+                  .showSnackBar(SnackBar(content: Text('Adresse acceptée')));
+            }
+          },
+          color: Colors.grey,
+          shape: RoundedRectangleBorder(
+            borderRadius: new BorderRadius.circular(18.0),
+          ),
+          child: Text('Suivant', style: TextStyle(color: Colors.white))),
+    );
+  }
+}
+
+List<Widget> renderEmailForm(validators) {
+  var validator = validators[0];
   return [
     Align(
       alignment: Alignment.center,
@@ -15,6 +43,35 @@ List<Widget> renderEmailForm(validator) {
           textAlign: TextAlign.center,
           decoration: InputDecoration(
               labelText: 'Ton email',
+              labelStyle: TextStyle(
+                fontWeight: FontWeight.w300,
+              )),
+          validator: validator,
+        ),
+      ),
+    )
+  ];
+}
+
+List<Widget> renderLoginForm(email, validator) {
+  return [
+    Align(
+      alignment: Alignment.center,
+      child: Container(
+        padding: EdgeInsets.only(left: 40, right: 40),
+        child: Text(
+          'Entre le code de confirmation (valable 24h) envoyé à '+ email+ ' pour te connecter'
+        ),
+      ),
+    ),
+    Align(
+      alignment: Alignment.center,
+      child: Container(
+        padding: EdgeInsets.all(40),
+        child: TextFormField(
+          textAlign: TextAlign.center,
+          decoration: InputDecoration(
+              labelText: 'Code de confirmation',
               labelStyle: TextStyle(
                 fontWeight: FontWeight.w300,
               )),

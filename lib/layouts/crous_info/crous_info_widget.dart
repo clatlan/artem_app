@@ -10,6 +10,6 @@ class CrousInfoWidget extends StatelessWidget {
 	@override
 	Widget build(BuildContext context) {
 
-		return LoginPage();
+		return Center();
   }
 }
