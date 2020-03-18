@@ -50,7 +50,6 @@ class _MyCalendarState extends State<Calendar> {
   }
 
   void _onDaySelected(List events) {
-    print('CALLBACK: _onDaySelected');
     setState(
       () {
         _selectedEvents = events;
@@ -89,7 +88,6 @@ class _MyCalendarState extends State<Calendar> {
           else {
             formattedEvents = Map<DateTime, List<dynamic>>.from({});
           }
-          print(formattedEvents);
 
           return TableCalendar(
             locale: 'fr_FR',
@@ -209,7 +207,6 @@ class DayWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  	print('Jai la chiasse');
     return Container(
       margin: EdgeInsets.all(10),
       child: Text(

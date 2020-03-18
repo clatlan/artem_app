@@ -17,6 +17,10 @@ class AuthService {
   }
 
   Future<bool> isLoggedIn() async {
+    await updateHotJwt();
+    if (authenticatedUserId == null) {
+      return false;
+    }
     final response = await http.get(
       globals.endpoint + '/api/v1/users/' + authenticatedUserId.toString(),
       headers: {'Authorization': jwt()},
@@ -46,19 +50,19 @@ class AuthService {
     );
   }
 
-  void login(String email, String validationCode) async {
+  Future<void> login(String email, String validationCode) async {
     var response = await http.post(
       globals.endpoint + '/authenticate',
       body: {'email': email, 'validation_code': validationCode},
     );
     if (response.statusCode == 200) {
       var jwt = json.decode(response.body)['auth_token'];
-      print(jwt);
       saveJwtToHotAndColdStorage(jwt);
     } else {
       // If that call was not successful, throw an error.
       throw Exception(globals.standardErrorMessage);
     }
+    return;
   }
 
   Map<String, dynamic> parseJwt(String token) {

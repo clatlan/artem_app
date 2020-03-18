@@ -16,6 +16,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:artem_app/layouts/home.dart';
 import 'package:artem_app/layouts/login_page/login_page.dart';
 import './services/auth_service.dart';
+import 'layouts/common/background.dart';
 
 void main() {
   initializeDateFormatting().then((_) => runApp(MyApp()));
@@ -60,6 +61,7 @@ class StateProviderState extends State<StateProvider> {
 
   void checkLogin() {
     authService.isLoggedIn().then((returnedIsLoggedIn) {
+      print(returnedIsLoggedIn);
       setState(() {
         isLoggedIn = returnedIsLoggedIn;
       });
@@ -79,10 +81,15 @@ class StateProviderState extends State<StateProvider> {
   Widget displayPage() {
     if (!checkLoginFinished) {
       checkLogin();
-      return Container(width: 200, child: CircularProgressIndicator());
+      return Scaffold(
+        body: Stack(
+          children: <Widget>[
+            Background(),
+            Center(child: CircularProgressIndicator()),
+          ],
+        ),
+      );
     }
-    print(authService.jwt());
-    print(isLoggedIn);
     return isLoggedIn ? HomePage() : LoginPage(this.loginCallback);
   }
 

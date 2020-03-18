@@ -17,7 +17,7 @@ class HomePageState extends State<HomePage> {
   bool isLoggedIn;
   int _selectedIndex = 2;
   static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   void _onItemTapped(int index) {
     setState(() {
@@ -34,36 +34,38 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-          child: _widgetLayout.elementAt(_selectedIndex),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
-              title: Text('Profil'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.search),
-              title: Text('Recherche'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.event_note),
-              title: Text('Evènements'),
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.info),
-              title: Text('Informations'),
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.pink,
-          onTap: _onItemTapped,
-          iconSize: 20.0,
-          unselectedFontSize: 15,
-          type: BottomNavigationBarType.fixed,
-        ),
-        resizeToAvoidBottomPadding: false);
+    return SafeArea(
+      child: Scaffold(
+          body: Center(
+            child: _widgetLayout.elementAt(_selectedIndex),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.account_circle),
+                title: Text('Profil'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search),
+                title: Text('Recherche'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.event_note),
+                title: Text('Evènements'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.info),
+                title: Text('Informations'),
+              ),
+            ],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.pink,
+            onTap: _onItemTapped,
+            iconSize: 20.0,
+            unselectedFontSize: 15,
+            type: BottomNavigationBarType.fixed,
+          ),
+          resizeToAvoidBottomPadding: false),
+    );
   }
 }

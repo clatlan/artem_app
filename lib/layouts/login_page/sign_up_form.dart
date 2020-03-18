@@ -76,7 +76,6 @@ class SignUpFormState extends State<SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
-    print(containerWidth);
     return Form(
       key: _formKey,
       child: Column(

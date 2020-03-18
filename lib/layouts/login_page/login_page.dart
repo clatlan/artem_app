@@ -9,7 +9,6 @@ import 'login_painter.dart';
 
 bool emailParsingCorrect(email) {
   List<String> splitMail = email.split('@');
-  print(splitMail);
   if (splitMail.length != 2) {
     return false;
   }
@@ -146,15 +145,14 @@ class _LoginFormState extends State<LoginForm> {
       authService.requestConfirmationCode(email);
       return renderLoginForm(email, confirmationCodeValidator);
     }
-    authService.login(email, confirmationCode);
-    this.loginCallback();
+    authService.login(email, confirmationCode).then((onValue) {
+      this.loginCallback();
+    });
     return [CircularProgressIndicator()];
-
   }
 
   @override
   Widget build(BuildContext context) {
-    print(containerWidth);
     return Form(
       key: _formKey,
       child: Column(
