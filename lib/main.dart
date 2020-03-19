@@ -56,7 +56,7 @@ class StateProvider extends StatefulWidget {
 
 class StateProviderState extends State<StateProvider> {
   bool checkLoginFinished = false;
-  bool isLoggedIn;
+  bool isLoggedIn = false;
   AuthService authService = AuthService();
 
   void checkLogin() {
