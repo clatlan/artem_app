@@ -29,7 +29,7 @@ class HomePageState extends State<HomePage> {
     ProfileWidget(),
     SearchWidget(),
     EventWidget(),
-    CrousInfoWidget('hey'),
+    CrousInfoWidget(),
   ];
 
   @override

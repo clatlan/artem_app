@@ -19,7 +19,6 @@ Map<DateTime, List<dynamic>> prepareEvents(List<Event> events) {
       eventJson[jsonKey] = [events[i].name];
     }
   }
-  print(eventJson);
   return eventJson;
 }
 
@@ -174,7 +173,7 @@ class _MyCalendarState extends State<Calendar> {
                         horizontal: 8.0, vertical: 4.0),
                     child: ListTile(
                       title: Text(event.toString()),
-                      onTap: () => print('$event tapped!'),
+                      onTap: () => null,
                     ),
                   ))
               .toList()

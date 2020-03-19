@@ -1,15 +1,26 @@
-import 'package:artem_app/layouts/login_page/login_page.dart';
+import 'package:artem_app/layouts/common/loader.dart';
 import 'package:flutter/material.dart';
 import '../../services/auth_service.dart';
 
 class CrousInfoWidget extends StatelessWidget {
-	final String name;
+	List <Widget> crousInfoList;
 
-	CrousInfoWidget(this.name);
+	void getCrousInfo () {
+
+
+	}
+
 
 	@override
 	Widget build(BuildContext context) {
 
-		return Center();
+		return Scaffold(
+			appBar: AppBar(
+				title: Text("Informations sur le campus Artem"),
+			),
+			body: Column(
+				children: <Widget>[],
+			),
+		);
   }
 }

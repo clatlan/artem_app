@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:artem_app/services/models/crous_entry.dart';
 import 'package:artem_app/services/models/event.dart';
 import 'package:http/http.dart' as http;
 import '../../services/variables.dart' as globals;
@@ -37,6 +38,26 @@ class DataFactory {
         users.add(User.fromJson(list[i]['user']));
       }
       return users;
+    } else {
+      // If that call was not successful, throw an error.
+      throw Exception(globals.standardErrorMessage);
+    }
+  }
+
+  Future<List<CrousEntry>> fetchCrousEntries() async {
+
+    final response = await http.get(
+      globals.endpoint + '/api/v1/events',
+      headers: {'Authorization': auth.jwt()},
+    );
+
+    if (response.statusCode == 200) {
+      var list = json.decode(response.body);
+      List<CrousEntry> crousEntries = [];
+      for (var i = 0; i < list.length; i++) {
+        crousEntries.add(CrousEntry.fromJson(list[i]['crous_entry']));
+      }
+      return crousEntries;
     } else {
       // If that call was not successful, throw an error.
       throw Exception(globals.standardErrorMessage);

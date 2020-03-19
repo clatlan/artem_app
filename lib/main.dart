@@ -61,7 +61,6 @@ class StateProviderState extends State<StateProvider> {
 
   void checkLogin() {
     authService.isLoggedIn().then((returnedIsLoggedIn) {
-      print(returnedIsLoggedIn);
       setState(() {
         isLoggedIn = returnedIsLoggedIn;
       });

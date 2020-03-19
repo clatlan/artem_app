@@ -1,3 +1,4 @@
+import 'package:artem_app/layouts/common/loader.dart';
 import 'package:flutter/material.dart';
 
 import './profile_info.dart';
@@ -21,6 +22,61 @@ class ProfileWidget extends StatefulWidget {
   State<StatefulWidget> createState() => ProfileState();
 }
 
+class UserInfo extends StatelessWidget {
+  final User user;
+
+  UserInfo({Key key,  @required this.user}) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+
+        //logo,
+        SizedBox(height: 48.0),
+        //userIdLabel,
+        Center(
+          child: Container(
+              margin: const EdgeInsets.all(10.0),
+              child: Text(user.email,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.pink))),
+        ),
+        SizedBox(height: 30.0),
+        //emailLabel,
+        Text("Informations personnelles",
+            style: TextStyle(color: Colors.black)),
+        SizedBox(height: 6.0),
+        Divider(
+          height: 1,
+          color: Colors.pink,
+        ),
+        //firstNameLabel,
+        SizedBox(height: 24.0),
+        Column(
+          children: <Widget>[
+            ProfileInfo("Nom", user.lastName),
+            ProfileInfo("Prénom", user.firstName),
+            ProfileInfo("Ecole", user.school.name),
+            ProfileInfo("Promotion", user.yearEntered.toString()),
+            associationInfo(user)
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget associationInfo (User user) {
+    final plural = user.roles.length > 1 ? 1 : 0;
+    final label = "Association" + "s" * (plural);
+    final content = user.unionsString();
+    return ProfileInfo(label, content);
+  }
+
+}
+
 class ProfileState extends State<ProfileWidget> {
 
   Future<User> user;
@@ -32,13 +88,6 @@ class ProfileState extends State<ProfileWidget> {
     super.initState();
     final dataFactory = DataFactory();
     user = dataFactory.fetchUser(authService.currentUser());
-  }
-
-  Widget associationInfo (User user) {
-    final plural = user.roles.length > 1 ? 1 : 0;
-    final label = "Association" + "s" * (plural);
-    final content = user.unionsString();
-    return ProfileInfo(label, content);
   }
 
   @override
@@ -70,37 +119,7 @@ class ProfileState extends State<ProfileWidget> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: <Widget>[
-                              //logo,
-                              SizedBox(height: 48.0),
-                              //userIdLabel,
-                              Center(
-                                child: Container(
-                                    margin: const EdgeInsets.all(10.0),
-                                    child: Text(snapshot.data.email,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.pink))),
-                              ),
-                              SizedBox(height: 30.0),
-                              //emailLabel,
-                              Text("Informations personnelles",
-                                  style: TextStyle(color: Colors.black)),
-                              SizedBox(height: 6.0),
-                              Divider(
-                                height: 1,
-                                color: Colors.pink,
-                              ),
-                              //firstNameLabel,
-                              SizedBox(height: 24.0),
-                              Column(
-                                children: <Widget>[
-                                  ProfileInfo("Nom", snapshot.data.lastName),
-                                  ProfileInfo("Prénom", snapshot.data.firstName),
-                                  ProfileInfo("Ecole", snapshot.data.school.name),
-                                  ProfileInfo("Promotion", snapshot.data.yearEntered.toString()),
-                                  associationInfo(snapshot.data)
-                                ],
-                              ),
+                              UserInfo(user: snapshot.data),
                               ProfileInfoUpdateButton(),
                               ProfileInfoDeleteButton(),
                             ],
@@ -118,7 +137,7 @@ class ProfileState extends State<ProfileWidget> {
         }
 
         // By default, show a loading spinner.
-        return CircularProgressIndicator();
+        return Scaffold(body: Center(child: Loader()));
       },
     ) ;
   }

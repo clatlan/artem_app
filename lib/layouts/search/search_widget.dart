@@ -1,4 +1,5 @@
 import 'package:artem_app/layouts/common/background.dart';
+import 'package:artem_app/layouts/common/loader.dart';
 import 'package:artem_app/services/models/data_factory.dart';
 import 'package:artem_app/services/models/user.dart';
 import 'package:flutter/material.dart';
@@ -19,29 +20,52 @@ class ForeGround extends StatefulWidget {
 }
 
 class ForeGroundState extends State<ForeGround> {
-  String searchQuery;
+  String loadedTextQuery;
   final searchText = TextEditingController();
   final dataFactory = DataFactory();
+  bool finishedLoading = false;
+  bool needsReload = true;
   Future<List<User>> users;
 
   @override
   void initState() {
     super.initState();
-    searchText.addListener(() => setState(() => null));
+    searchText.addListener(() {
+      if (searchText.text != loadedTextQuery)
+        setState(() => {needsReload = true});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    users = dataFactory.fetchUsers(startsWith: searchText.text);
+    if (needsReload) {
+      users = dataFactory.fetchUsers(startsWith: searchText.text);
+      finishedLoading = false;
+      users.whenComplete(() {
+        setState(() {
+          loadedTextQuery = searchText.text;
+          finishedLoading = true;
+        });
+      });
+    }
+    needsReload = false;
     return Column(
       children: <Widget>[
         Container(
           margin: EdgeInsets.all(20),
           child: SearchBar(searchText: searchText),
         ),
-        SearchResult(users: users)
+        SearchResult(users: users, finishedLoading: this.finishedLoading)
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the
+    // widget tree.
+    searchText.dispose();
+    super.dispose();
   }
 }
 
@@ -56,64 +80,63 @@ class SearchBar extends StatelessWidget {
         filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
             child: Container(
-          alignment: Alignment.topCenter,
-          child: TextField(
-            controller: searchText,
-            decoration: InputDecoration(
-              hintText: "Etudiants, Associations ou évènements",
-              hintStyle:
+              alignment: Alignment.topCenter,
+              child: TextField(
+                controller: searchText,
+                decoration: InputDecoration(
+                  hintText: "Etudiants, Associations ou évènements",
+                  hintStyle:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(25.0)),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.pink[300]),
-                borderRadius: BorderRadius.all(Radius.circular(25.0)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.pink),
-                borderRadius: BorderRadius.all(Radius.circular((25.0))),
-              ),
-              disabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(25.0),
+                  prefixIcon: Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.pink[300]),
+                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.pink),
+                    borderRadius: BorderRadius.all(Radius.circular((25.0))),
+                  ),
+                  disabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(25.0),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        )));
+            )));
   }
 }
 
 class SearchResult extends StatelessWidget {
   final Future<List<User>> users;
+  bool finishedLoading;
 
-  SearchResult({Key key, @required this.users}) : super(key: key);
+  SearchResult({Key key, @required this.users, @required this.finishedLoading})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: users,
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
+        if (snapshot.hasData && finishedLoading) {
           return Expanded(
               child: ListView.separated(
-            padding: const EdgeInsets.all(8),
-            itemCount: snapshot.data.length,
-            itemBuilder: (BuildContext context, int index) =>
-                ResultEntry(user: snapshot.data[index]),
-            separatorBuilder: (BuildContext context, int index) =>
+                padding: const EdgeInsets.all(8),
+                itemCount: snapshot.data.length,
+                itemBuilder: (BuildContext context, int index) =>
+                    ResultEntry(user: snapshot.data[index]),
+                separatorBuilder: (BuildContext context, int index) =>
                 const Divider(),
-          ));
+              ));
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
         // By default, show a loading spinner.
-        return Center(
-            child: Container(
-                alignment: Alignment(0.0, 0.0),
-                child: CircularProgressIndicator()));
+        return Expanded(child: Loader());
       },
     );
   }
@@ -178,4 +201,3 @@ class TextWithPadding extends StatelessWidget {
         padding: EdgeInsets.only(bottom: padding), child: Text(text));
   }
 }
-
