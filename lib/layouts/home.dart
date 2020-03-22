@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 
 import 'crous_info/crous_info_widget.dart';
-import 'event/event_widget.dart';
-import 'profile/profile_widget.dart';
+import 'event/event_page.dart';
+import 'home_page/home_page.dart';
 import 'search/search_widget.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+class HomeNavBar extends StatefulWidget {
+  HomeNavBar({Key key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => HomePageState();
+  State<HomeNavBar> createState() => HomeNavBarState();
 }
 
-class HomePageState extends State<HomePage> {
+class HomeNavBarState extends State<HomeNavBar> {
   bool checkLoginFinished = false;
   bool isLoggedIn;
-  int _selectedIndex = 2;
+  int _selectedIndex = 0;
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
 
   void _onItemTapped(int index) {
     setState(() {
@@ -25,25 +26,38 @@ class HomePageState extends State<HomePage> {
     });
   }
 
+  void redirectToSearch() {
+    setState(() {
+      _selectedIndex = 1;
+    });
+  }
   final List<Widget> _widgetLayout = [
-    ProfileWidget(),
+    Container(),
     SearchWidget(),
-    EventWidget(),
+    EventPage(),
     CrousInfoWidget(),
   ];
+  
+  Widget selectWidget(int index){
+    if (index == 0)  {
+      return HomePage(this.redirectToSearch);
+    }else{
+      return _widgetLayout.elementAt(index);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
           body: Center(
-            child: _widgetLayout.elementAt(_selectedIndex),
+            child: selectWidget(_selectedIndex),
           ),
           bottomNavigationBar: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle),
-                title: Text('Profil'),
+                icon: Icon(Icons.home),
+                title: Text('Accueil'),
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.search),

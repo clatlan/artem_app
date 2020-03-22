@@ -80,33 +80,33 @@ class SearchBar extends StatelessWidget {
         filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
             child: Container(
-              alignment: Alignment.topCenter,
-              child: TextField(
-                controller: searchText,
-                decoration: InputDecoration(
-                  hintText: "Etudiants, Associations ou évènements",
-                  hintStyle:
+          alignment: Alignment.topCenter,
+          child: TextField(
+            controller: searchText,
+            decoration: InputDecoration(
+              hintText: "Etudiants, Associations ou évènements",
+              hintStyle:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.pink[300]),
-                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.pink),
-                    borderRadius: BorderRadius.all(Radius.circular((25.0))),
-                  ),
-                  disabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(25.0),
-                    ),
-                  ),
+              prefixIcon: Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(25.0)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.pink[300]),
+                borderRadius: BorderRadius.all(Radius.circular(25.0)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.pink),
+                borderRadius: BorderRadius.all(Radius.circular((25.0))),
+              ),
+              disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(25.0),
                 ),
               ),
-            )));
+            ),
+          ),
+        )));
   }
 }
 
@@ -125,13 +125,13 @@ class SearchResult extends StatelessWidget {
         if (snapshot.hasData && finishedLoading) {
           return Expanded(
               child: ListView.separated(
-                padding: const EdgeInsets.all(8),
-                itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int index) =>
-                    ResultEntry(user: snapshot.data[index]),
-                separatorBuilder: (BuildContext context, int index) =>
+            padding: const EdgeInsets.all(8),
+            itemCount: snapshot.data.length,
+            itemBuilder: (BuildContext context, int index) =>
+                ResultEntry(user: snapshot.data[index]),
+            separatorBuilder: (BuildContext context, int index) =>
                 const Divider(),
-              ));
+          ));
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }

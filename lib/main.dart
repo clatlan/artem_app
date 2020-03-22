@@ -55,13 +55,21 @@ class StateProvider extends StatefulWidget {
 }
 
 class StateProviderState extends State<StateProvider> {
-  bool checkLoginFinished = false;
-  bool isLoggedIn = false;
+  bool checkLoginFinished;
+  bool isLoggedIn;
   AuthService authService = AuthService();
+
+  @override
+  void initState() {
+    super.initState();
+    checkLoginFinished = false;
+    isLoggedIn = false;
+  }
 
   void checkLogin() {
     authService.isLoggedIn().then((returnedIsLoggedIn) {
       setState(() {
+        print(returnedIsLoggedIn);
         isLoggedIn = returnedIsLoggedIn;
       });
     }).whenComplete(() {
@@ -89,7 +97,7 @@ class StateProviderState extends State<StateProvider> {
         ),
       );
     }
-    return isLoggedIn ? HomePage() : LoginPage(this.loginCallback);
+    return isLoggedIn ? HomeNavBar() : LoginPage(this.loginCallback);
   }
 
   @override

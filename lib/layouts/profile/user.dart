@@ -10,4 +10,5 @@ class User {
     this.lastName,
     this.email,
   });
+
 }
