@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:artem_app/services/models/user.dart';
 import '../../services/models/data_factory.dart';
 import '../../services/auth_service.dart';
-import 'add_event_popup.dart';
+import 'add_event_page.dart';
 
 // gérer le layout du widget avec le carousel
 

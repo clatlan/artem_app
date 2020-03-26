@@ -38,8 +38,6 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var auth = AuthService();
-    print("Login page, auth.jwt() instruction");
-    print(auth.jwt());
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Stack(

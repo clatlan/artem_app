@@ -39,13 +39,13 @@ class _DatePickerState extends State<DatePicker> {
       onTap: () => _selectDate(context),
       child: _hasBeenTapped
           ? Text(
-              dateFormat.format(selectedDate),
-              style: TextStyle(color: Colors.blue, fontSize: 16),
-            )
+        dateFormat.format(selectedDate),
+        style: TextStyle(color: Colors.blue, fontSize: 16),
+      )
           : Text(
-              datePickerLabel,
-              style: TextStyle(color: Colors.grey, fontSize: 16),
-            ),
+        datePickerLabel,
+        style: TextStyle(color: Colors.grey, fontSize: 16),
+      ),
     );
   }
 }
@@ -85,13 +85,13 @@ class _TimePickerState extends State<TimePicker> {
       onTap: () => _selectTime(context),
       child: _hasBeenTapped
           ? Text(
-              selectedTime.format(context),
-              style: TextStyle(color: Colors.blue, fontSize: 16),
-            )
+        selectedTime.format(context),
+        style: TextStyle(color: Colors.blue, fontSize: 16),
+      )
           : Text(
-              timePickerLabel,
-              style: TextStyle(color: Colors.grey, fontSize: 16),
-            ),
+        timePickerLabel,
+        style: TextStyle(color: Colors.grey, fontSize: 16),
+      ),
     );
   }
 }
@@ -113,7 +113,6 @@ class _AddEventState extends State<AddEvent> {
           centerTitle: true,
           title: Text(
             "Créer un évènement",
-            style: TextStyle(fontSize: 25),
 //            textAlign: TextAlignV.center,
           ),
         ),

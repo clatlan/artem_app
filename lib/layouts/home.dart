@@ -31,55 +31,47 @@ class HomeNavBarState extends State<HomeNavBar> {
       _selectedIndex = 1;
     });
   }
-  final List<Widget> _widgetLayout = [
-    Container(),
-    SearchWidget(),
-    EventPage(),
-    CrousInfoWidget(),
-  ];
-  
-  Widget selectWidget(int index){
-    if (index == 0)  {
-      return HomePage(this.redirectToSearch);
-    }else{
-      return _widgetLayout.elementAt(index);
+
+    @override
+    Widget build(BuildContext context) {
+      List<Widget> _widgetLayout = [
+        HomePage(this.redirectToSearch),
+        SearchWidget(),
+        EventPage(),
+        CrousInfoWidget(),
+      ];
+      return SafeArea(
+        child: Scaffold(
+            body: Center(
+              child: _widgetLayout.elementAt(_selectedIndex),
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  title: Text('Accueil'),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.search),
+                  title: Text('Recherche'),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.event_note),
+                  title: Text('Evènements'),
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.info),
+                  title: Text('Informations'),
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: Colors.pink,
+              onTap: _onItemTapped,
+              iconSize: 20.0,
+              unselectedFontSize: 15,
+              type: BottomNavigationBarType.fixed,
+            ),
+            resizeToAvoidBottomPadding: false),
+      );
     }
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          body: Center(
-            child: selectWidget(_selectedIndex),
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                title: Text('Accueil'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.search),
-                title: Text('Recherche'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.event_note),
-                title: Text('Evènements'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.info),
-                title: Text('Informations'),
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            selectedItemColor: Colors.pink,
-            onTap: _onItemTapped,
-            iconSize: 20.0,
-            unselectedFontSize: 15,
-            type: BottomNavigationBarType.fixed,
-          ),
-          resizeToAvoidBottomPadding: false),
-    );
-  }
-}

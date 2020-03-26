@@ -1,9 +1,13 @@
+import 'package:flutter/material.dart';
+import 'dart:ui';
+
 import 'package:artem_app/layouts/common/background.dart';
 import 'package:artem_app/layouts/common/loader.dart';
 import 'package:artem_app/services/models/data_factory.dart';
 import 'package:artem_app/services/models/user.dart';
-import 'package:flutter/material.dart';
-import 'dart:ui';
+
+import 'package:artem_app/layouts/profile/profile_widget.dart';
+
 
 class SearchWidget extends StatelessWidget {
   @override
@@ -154,6 +158,12 @@ class ResultEntry extends StatelessWidget {
         splashColor: Colors.blue.withAlpha(30),
         onTap: () {
           print('Card tapped.');
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return ProfileDialog(user: user);
+            },
+          );
         },
         child: Container(
           padding: EdgeInsets.all(10),

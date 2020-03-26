@@ -1,5 +1,6 @@
-import 'package:artem_app/layouts/profile/profile_widget.dart';
 import 'package:flutter/material.dart';
+
+import 'package:artem_app/layouts/profile/my_profile.dart';
 import 'package:artem_app/layouts/common/background.dart';
 import 'package:artem_app/layouts/event/event_widget.dart';
 
@@ -57,12 +58,13 @@ class HomePageFGrd extends StatelessWidget {
                     child: Material(
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.pink,
+                      elevation: 6,
                       child: InkWell(
                         onTap: () {
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return ProfileWidget();
+                              return MyProfile();
                             },
                           );
                         },
@@ -75,7 +77,7 @@ class HomePageFGrd extends StatelessWidget {
                               size: 40,
                             ),
                             Text(
-                              "Accéder à mon profile",
+                              "Mon profile",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -99,6 +101,7 @@ class HomePageFGrd extends StatelessWidget {
                   child: Material(
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.blue,
+                    elevation: 6,
                     child: InkWell(
                       onTap: () {
                         redirectToSearch();
