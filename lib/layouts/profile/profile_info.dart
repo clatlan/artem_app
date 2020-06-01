@@ -9,31 +9,27 @@ class ProfileInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: Text(
-                text,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.pink,
-                ),
-              ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Row(
+        children: <Widget>[
+          Text(
+            text,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.pink,
             ),
-            Text(
-              //nameId,
-              textId,
-              style: TextStyle(
-                color: Colors.black,
-              ),
-            )
-          ],
-        ),
-	      SizedBox(height: 32.0),
-      ],
+          ),
+          Spacer(),
+          Text(
+            //nameId,
+            textId,
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          )
+        ],
+      ),
     );
   }
 }

@@ -97,7 +97,7 @@ class StateProviderState extends State<StateProvider> {
         ),
       );
     }
-    return isLoggedIn ? HomePage() : LoginPage(this.loginCallback);
+    return isLoggedIn ? HomeNavBar() : LoginPage(this.loginCallback);
   }
 
   @override

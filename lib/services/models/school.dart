@@ -12,7 +12,7 @@ class School {
   }
 
   Image image() {
-    var filepath = this.name == 'ICN Buisness School'
+    var filepath = this.name == 'ICN Business School'
         ? 'assets/images/logoICN.png'
         : 'assets/images/logo${this.name.toUpperCase()}.jpg';
     return Image(width: 100, image: AssetImage(filepath));

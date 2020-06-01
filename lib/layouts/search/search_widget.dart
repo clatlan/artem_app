@@ -1,9 +1,13 @@
+import 'package:flutter/material.dart';
+import 'dart:ui';
+
 import 'package:artem_app/layouts/common/background.dart';
 import 'package:artem_app/layouts/common/loader.dart';
 import 'package:artem_app/services/models/data_factory.dart';
 import 'package:artem_app/services/models/user.dart';
-import 'package:flutter/material.dart';
-import 'dart:ui';
+
+import 'package:artem_app/layouts/profile/profile_widget.dart';
+
 
 class SearchWidget extends StatelessWidget {
   @override
@@ -80,33 +84,33 @@ class SearchBar extends StatelessWidget {
         filter: new ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
         child: Container(
             child: Container(
-              alignment: Alignment.topCenter,
-              child: TextField(
-                controller: searchText,
-                decoration: InputDecoration(
-                  hintText: "Etudiants, Associations ou évènements",
-                  hintStyle:
+          alignment: Alignment.topCenter,
+          child: TextField(
+            controller: searchText,
+            decoration: InputDecoration(
+              hintText: "Etudiants, Associations ou évènements",
+              hintStyle:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.pink[300]),
-                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.pink),
-                    borderRadius: BorderRadius.all(Radius.circular((25.0))),
-                  ),
-                  disabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(25.0),
-                    ),
-                  ),
+              prefixIcon: Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(25.0)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.pink[300]),
+                borderRadius: BorderRadius.all(Radius.circular(25.0)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.pink),
+                borderRadius: BorderRadius.all(Radius.circular((25.0))),
+              ),
+              disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(25.0),
                 ),
               ),
-            )));
+            ),
+          ),
+        )));
   }
 }
 
@@ -125,13 +129,13 @@ class SearchResult extends StatelessWidget {
         if (snapshot.hasData && finishedLoading) {
           return Expanded(
               child: ListView.separated(
-                padding: const EdgeInsets.all(8),
-                itemCount: snapshot.data.length,
-                itemBuilder: (BuildContext context, int index) =>
-                    ResultEntry(user: snapshot.data[index]),
-                separatorBuilder: (BuildContext context, int index) =>
+            padding: const EdgeInsets.all(8),
+            itemCount: snapshot.data.length,
+            itemBuilder: (BuildContext context, int index) =>
+                ResultEntry(user: snapshot.data[index]),
+            separatorBuilder: (BuildContext context, int index) =>
                 const Divider(),
-              ));
+          ));
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
@@ -154,6 +158,12 @@ class ResultEntry extends StatelessWidget {
         splashColor: Colors.blue.withAlpha(30),
         onTap: () {
           print('Card tapped.');
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return ProfileDialog(user: user);
+            },
+          );
         },
         child: Container(
           padding: EdgeInsets.all(10),

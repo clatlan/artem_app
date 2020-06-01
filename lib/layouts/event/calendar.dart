@@ -2,6 +2,7 @@ import 'package:artem_app/services/models/data_factory.dart';
 import 'package:artem_app/services/models/event.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart';
 
 class Calendar extends StatefulWidget {
   @override
@@ -23,7 +24,7 @@ Map<DateTime, List<dynamic>> prepareEvents(List<Event> events) {
 }
 
 class _MyCalendarState extends State<Calendar> {
-  Future <List<Event>> _events;
+  Future<List<Event>> _events;
   List _selectedEvents;
   DateTime _selectedDay;
   CalendarController _calendarController;
@@ -32,7 +33,6 @@ class _MyCalendarState extends State<Calendar> {
   @override
   void initState() {
     super.initState();
-
 
     final _todayDay = DateTime.now();
 
@@ -83,81 +83,118 @@ class _MyCalendarState extends State<Calendar> {
           Map<DateTime, List<dynamic>> formattedEvents;
           if (snapshot.hasData) {
             formattedEvents = prepareEvents(snapshot.data);
-          }
-          else {
+          } else {
             formattedEvents = Map<DateTime, List<dynamic>>.from({});
           }
+          ;
 
-          return TableCalendar(
+          return CalendarCarousel(
             locale: 'fr_FR',
-            events: Map<DateTime, List<dynamic>>.from(formattedEvents),
-            calendarController: _calendarController,
-            holidays: _holidays,
-            startingDayOfWeek: StartingDayOfWeek.monday,
-            availableGestures: AvailableGestures.none,
-            availableCalendarFormats: const {CalendarFormat.month: 'Month'},
-            calendarStyle: CalendarStyle(
-              weekdayStyle: TextStyle(color: Colors.blue),
-              weekendStyle: TextStyle(color: Colors.pink),
-              outsideStyle: TextStyle(color: Colors.grey),
-              unavailableStyle: TextStyle(color: Colors.yellow),
-              outsideWeekendStyle: TextStyle(color: Colors.grey),
+            height: MediaQuery.of(context).size.height * 0.5,
+            weekendTextStyle: TextStyle(color: Colors.pink),
+            weekdayTextStyle: TextStyle(color: Colors.blue),
+            todayButtonColor: Colors.blue,
+            selectedDayTextStyle: TextStyle(color: Colors.pink),
+            markedDateWidget: Positioned(
+              child: Container(
+                color: Colors.green,
+                height: 4.0,
+                width: 4.0,
+              ),
+              bottom: 4.0,
+              left: 18.0,
             ),
-            daysOfWeekStyle: DaysOfWeekStyle(
-//        dowTextBuilder: (date, locale) {
-//          return DateFormat.E(locale)
-//              .format(date)
-//              .substring(0, 3)
-//              .toUpperCase();
-//        },
-              weekdayStyle: TextStyle(color: Colors.blue),
-              weekendStyle: TextStyle(color: Colors.pink),
-            ),
-            headerVisible: true,
-            builders: CalendarBuilders(
-              markersBuilder: (context, date, events, holidays) {
-                return [
-                  Container(
-                    decoration: new BoxDecoration(
-                      color: Colors.black,
-                      shape: BoxShape.circle,
-                    ),
-                    margin: const EdgeInsets.all(4.0),
-                    width: 4,
-                    height: 4,
-                  )
-                ];
-              },
-              selectedDayBuilder: (context, date, _) {
-                return Container(
-                  decoration: new BoxDecoration(
-                    color: Colors.pink,
-                    shape: BoxShape.circle,
-                  ),
-                  margin: const EdgeInsets.all(4.0),
-                  width: 100,
-                  height: 100,
-                  child: Center(
-                    child: Text(
-                      '${date.day}',
-                      style: TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.white,
-                      ),
+            iconColor: Colors.pink,
+
+            onDayPressed: (DateTime date, List<Event> events) {
+              return Container(
+                decoration: new BoxDecoration(
+                  color: Colors.pink,
+                  shape: BoxShape.circle,
+                ),
+                margin: const EdgeInsets.all(4.0),
+                width: 100,
+                height: 100,
+                child: Center(
+                  child: Text(
+                    '${date.day}',
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.white,
                     ),
                   ),
-                );
-              },
-            ),
-            onDaySelected: (_, events) {
-              _onDaySelected(events);
-            },
-            onVisibleDaysChanged: null,
+                ),
+              );
+            }, //             markedDatesMap: formattedEvents,
           );
-        }
 
-    );
-
+//          return TableCalendar(
+//            locale: 'fr_FR',
+//            events: Map<DateTime, List<dynamic>>.from(formattedEvents),
+//            calendarController: _calendarController,
+//            holidays: _holidays,
+//            startingDayOfWeek: StartingDayOfWeek.monday,
+//            availableGestures: AvailableGestures.none,
+//            availableCalendarFormats: const {CalendarFormat.month: 'Month'},
+//            calendarStyle: CalendarStyle(
+//              weekdayStyle: TextStyle(color: Colors.blue),
+//              weekendStyle: TextStyle(color: Colors.pink),
+//              outsideStyle: TextStyle(color: Colors.grey),
+//              unavailableStyle: TextStyle(color: Colors.yellow),
+//              outsideWeekendStyle: TextStyle(color: Colors.grey),
+//            ),
+//            daysOfWeekStyle: DaysOfWeekStyle(
+////        dowTextBuilder: (date, locale) {
+////          return DateFormat.E(locale)
+////              .format(date)
+////              .substring(0, 3)
+////              .toUpperCase();
+////        },
+//              weekdayStyle: TextStyle(color: Colors.blue),
+//              weekendStyle: TextStyle(color: Colors.pink),
+//            ),
+//            headerVisible: true,
+//            builders: CalendarBuilders(
+//              markersBuilder: (context, date, events, holidays) {
+//                return [
+//                  Container(
+//                    decoration: new BoxDecoration(
+//                      color: Colors.black,
+//                      shape: BoxShape.circle,
+//                    ),
+//                    margin: const EdgeInsets.all(4.0),
+//                    width: 4,
+//                    height: 4,
+//                  )
+//                ];
+//              },
+//              selectedDayBuilder: (context, date, _) {
+//                return Container(
+//                  decoration: new BoxDecoration(
+//                    color: Colors.pink,
+//                    shape: BoxShape.circle,
+//                  ),
+//                  margin: const EdgeInsets.all(4.0),
+//                  width: 100,
+//                  height: 100,
+//                  child: Center(
+//                    child: Text(
+//                      '${date.day}',
+//                      style: TextStyle(
+//                        fontSize: 16.0,
+//                        color: Colors.white,
+//                      ),
+//                    ),
+//                  ),
+//                );
+//              },
+//            ),
+//            onDaySelected: (_, events) {
+//              _onDaySelected(events);
+//            },
+//            onVisibleDaysChanged: null,
+//          );
+        });
   }
 
   Widget _buildEventList() {

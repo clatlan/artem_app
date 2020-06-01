@@ -19,7 +19,7 @@ class Union {
       school: School.fromJson(json['school'])
     );
   }
-  String fullName() {
-    return this.name + ' ' + this.school.name;
-  }
+//  String fullName() {
+//    return this.name + ' ' + this.school.name;
+//  }
 }
