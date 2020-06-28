@@ -9,48 +9,47 @@ class ProfileWidget extends StatelessWidget {
 
   ProfileWidget({Key key, @required this.user});
 
-  Widget _getSchoolLogoImagePath() {
-    if (user.school.name == "Mines") {
-      return Positioned(
-        top: 200,
-        left: 50,
-        right: 50,
-        child: Opacity(
-          opacity: 0.05,
-          child: Image.asset("assets/images/logoMINEScropped.jpg", scale: 3.0),
-        ),
-      );
-    } else if (user.school.name == "Ensad") {
-      return Positioned(
-        top: 240,
-        left: 50,
-        right: 50,
-        child: Opacity(
-          opacity: 0.05,
-          child: Image.asset("assets/images/logoENSADcropped.jpg", scale: 1.5),
-        ),
-      );
-    } else if (user.school.name == "ICN Business School") {
-      print("hey logo icn");
-      return Positioned(
-        top: 220,
-        left: 50,
-        right: 50,
-        child: Opacity(
-          opacity: 0.05,
-          child: Image.asset("assets/images/logoICN.png", scale: 1.5),
-        ),
-      );
-    }
-    // By default, return an empty container
-    return Container();
-  }
+//  Widget _getSchoolLogoImage() {
+//    if (user.school.name == "Mines") {
+//      return Positioned(
+//        bottom: 80,
+//        left: 50,
+//        right: 50,
+//        child: Opacity(
+//          opacity: 0.05,
+//          child: Image.asset("assets/images/logoMINEScropped.jpg", scale: 3.0),
+//        ),
+//      );
+//    } else if (user.school.name == "Ensad") {
+//      return Positioned(
+//        bottom: 120,
+//        left: 50,
+//        right: 50,
+//        child: Opacity(
+//          opacity: 0.05,
+//          child: Image.asset("assets/images/logoENSADcropped.jpg", scale: 1.5),
+//        ),
+//      );
+//    } else if (user.school.name == "ICN Business School") {
+//      return Positioned(
+//        bottom: 100,
+//        left: 50,
+//        right: 50,
+//        child: Opacity(
+//          opacity: 0.05,
+//          child: Image.asset("assets/images/logoICN.png", scale: 1.5),
+//        ),
+//      );
+//    }
+//    // By default, return an empty container
+//    return Container();
+//  }
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        _getSchoolLogoImagePath(),
+//        _getSchoolLogoImage(),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -107,13 +106,13 @@ class ProfileWidget extends StatelessWidget {
           ),
           Spacer(),
           Text(
-            //nameId,
+//            nameId,
             textId,
             style: TextStyle(
               color: Colors.blue,
               fontWeight: FontWeight.bold,
             ),
-          )
+          ),
         ],
       ),
     );
@@ -122,8 +121,68 @@ class ProfileWidget extends StatelessWidget {
   Widget associationInfo(User user) {
     final plural = user.roles.length > 1 ? 1 : 0;
     final label = "Association" + "s" * (plural);
-    final content = user.unionsString();
-    return profileInfo(label, content);
+    final content = user.unionsList();
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical :16.0),
+      child: Row(
+        children: <Widget>[
+          Text(
+            label,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.pink,
+            ),
+          ),
+          Spacer(),
+          Container(
+            width: 200,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: content.map((unionName) {
+                  return Padding(
+                    padding: EdgeInsets.only(right: 8),
+                    child: Text(
+                      unionName,
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          )
+
+//          Row(mainAxisSize: MainAxisSize.max, children: <Widget>[
+//            Expanded(
+//              child: SizedBox(
+//                width: 150,
+//                child: Text("Hey"),
+////              child: ListView(
+////                scrollDirection: Axis.horizontal,
+////                children: content.map((unionName) {
+////                  print(unionName);
+////                  return Container(
+////                    width: 10,
+////                    height: 10,
+////                    child: Text(
+////                      unionName,
+////                      style: TextStyle(
+////                        color: Colors.blue,
+////                        fontWeight: FontWeight.bold,
+////                      ),
+////                    ),
+////                  );
+////                }).toList(),
+////              ),
+//              ),
+//            )
+//          ])
+        ],
+      ),
+    );
   }
 }
 

@@ -31,7 +31,10 @@ class _MyProfileState extends State<MyProfile> {
         if (snapshot.hasData) {
           return Scaffold(
             appBar: AppBar(centerTitle: true, title: Text("Mon profile")),
-            body: Center(
+            body: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              padding: EdgeInsets.symmetric(vertical: 32),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

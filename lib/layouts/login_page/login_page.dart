@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:artem_app/layouts/login_page/sign_up_form.dart';
 import 'package:artem_app/services/auth_service.dart';
 import 'package:flutter/material.dart';

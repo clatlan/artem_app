@@ -39,9 +39,19 @@ class User {
     return unions.join(', ');
   }
 
+  List<String> unionsList() {
+    final List<String> unions = [];
+    for (var i = 0; i < this.roles.length; i++) {
+      unions.add(roles[i].union.name);
+    }
+//    return unions.join(', ');
+    return unions;
+  }
+
+
   bool canAddEvent() {
     for (var i = 0; i < this.roles.length; i++) {
-      if (this.roles[i].can_publish) {
+      if (this.roles[i].canPublish) {
         return true;
       }
     }

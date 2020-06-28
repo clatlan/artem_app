@@ -8,7 +8,6 @@ import 'package:artem_app/services/models/user.dart';
 
 import 'package:artem_app/layouts/profile/profile_widget.dart';
 
-
 class SearchWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -187,7 +186,13 @@ class ResultEntry extends StatelessWidget {
                                   fontFamily: 'Open Sans',
                                   fontWeight: FontWeight.w600,
                                   fontSize: 17))),
-                      Text(user.unionsString())
+                      ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: user.unionsList().map(
+                        (unionName) {
+                      return (Text(unionName));
+                        },
+                      ).toList())
                     ],
                   ))
             ],

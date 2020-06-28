@@ -48,19 +48,19 @@ class HomeNavBarState extends State<HomeNavBar> {
             bottomNavigationBar: BottomNavigationBar(
               items: const <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
+                  icon: Icon(Icons.home, size: 32,),
                   title: Text('Accueil'),
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.search),
+                  icon: Icon(Icons.search, size: 32),
                   title: Text('Recherche'),
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.event_note),
+                  icon: Icon(Icons.event_note, size: 32),
                   title: Text('Evènements'),
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.info),
+                  icon: Icon(Icons.info, size: 32,),
                   title: Text('Informations'),
                 ),
               ],
