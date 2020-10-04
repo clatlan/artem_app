@@ -42,7 +42,7 @@ class CardData {
   }
 
   factory CardData.fromUnion (Union union) {
-    return CardData(image: union.school.image(), title: union.fullName(), text: '');
+    return CardData(image: union.school.image(), title: union.name, text: '');
   }
 
 }
