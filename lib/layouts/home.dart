@@ -38,7 +38,7 @@ class HomeNavBarState extends State<HomeNavBar> {
         HomePage(this.redirectToSearch),
         SearchWidget(),
         EventPage(),
-        CrousInfoWidget(),
+        CrousInfoPage(),
       ];
       return SafeArea(
         child: Scaffold(
