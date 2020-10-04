@@ -13,7 +13,7 @@ class UnionMembersCarousel extends StatelessWidget {
   String getMemberRole(User member) {
     String roleName;
     for (Role role in member.roles) {
-      if (role.union.name == union.name) {
+      if (role.union.id == union.id) {
         roleName = role.name;
       } else {
         roleName = "Aucun poste";

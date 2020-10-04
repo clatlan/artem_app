@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:io';
-//import 'package:intl/intl.dart';
 
 import 'package:artem_app/layouts/event/image_picker.dart';
 import 'package:artem_app/layouts/event/date_time_picker.dart';

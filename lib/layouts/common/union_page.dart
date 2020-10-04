@@ -21,8 +21,7 @@ class UnionPage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 24.0),
         child: Center(
           child: ClipRRect(
-            borderRadius: BorderRadius.all(
-                Radius.circular(200)),
+            borderRadius: BorderRadius.all(Radius.circular(200)),
             child: Container(
               height: MediaQuery.of(context).size.height * 0.18,
               width: MediaQuery.of(context).size.height * 0.18,
@@ -118,62 +117,6 @@ class UnionPage extends StatelessWidget {
                   child: Ink.image(
                     image: union.image.image,
                     fit: BoxFit.cover,
-//                    child: InkWell(
-////                        child: Image.file(union.image, fit: BoxFit.scaleDown),
-//                      onTap: () {
-//                        showDialog(
-//                          context: context,
-//                          builder: (BuildContext context) {
-//                            return Scaffold(
-//                              body: Stack(
-//                                children: <Widget>[
-//                                  PhotoView(
-//                                    imageProvider:
-//                                        Image.file(union.image).image,
-//////                              fit: BoxFit.contain,
-////                          image: Image.file(event.image).image,
-//                                  ),
-//                                  Positioned(
-//                                    top: 10.0,
-//                                    left: 10.0,
-//                                    child: Padding(
-//                                      padding: const EdgeInsets.symmetric(
-//                                          vertical: 32.0),
-//                                      child: DecoratedBox(
-//                                        decoration: BoxDecoration(
-//                                          color: Colors.transparent,
-//                                          border: Border.all(
-//                                              color: Colors.grey[700],
-//                                              width: 0.8),
-//                                          borderRadius: BorderRadius.all(
-//                                              Radius.circular(30)),
-//                                          boxShadow: [
-//                                            BoxShadow(
-//                                                color: Colors.black
-//                                                    .withOpacity(0.2),
-//                                                spreadRadius: 1,
-//                                                blurRadius: 1,
-//                                                offset: Offset(0, 0))
-//                                          ],
-//                                        ),
-//                                        child: IconButton(
-//                                          icon: Icon(Icons.arrow_back,
-//                                              color: Colors.grey[700]),
-//                                          onPressed: () =>
-//                                              Navigator.of(context).pop(),
-//                                        ),
-//                                      ),
-//                                    ),
-//                                  )
-//                                ],
-//                              ),
-//                            );
-//                          },
-//                        );
-//                      },
-//                      highlightColor: Color.fromRGBO(50, 50, 50, 0.5),
-//                      splashColor: Colors.transparent,
-//                    ),
                   ),
                 ),
               )
