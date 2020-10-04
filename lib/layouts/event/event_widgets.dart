@@ -223,14 +223,14 @@ class EventWidget extends StatelessWidget {
                               fit: BoxFit.fill,
                             )
                           : Center(
-                            child: Text(
+                              child: Text(
                                 event.union.name,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
                               ),
-                          ),
+                            ),
                     ),
                   ),
                 ),
@@ -458,43 +458,44 @@ class EditButton extends StatelessWidget {
     final Future<User> user =
         DataFactory().fetchUser(AuthService().currentUser());
     return FutureBuilder<User>(
-        future: user,
-        builder: (context, snapshot) {
-          if (snapshot.hasData && canEdit(snapshot.data)) {
-            return Container(
-              padding: const EdgeInsets.symmetric(vertical: 32.0),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.grey[700], width: 0.8),
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                        offset: Offset(0, 0))
-                  ],
-                ),
-                child: IconButton(
-                  icon: Icon(Icons.edit, color: Colors.grey[700]),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AddEvent(
-                          user: snapshot.data,
-                          eventToBeEdited: eventTobeEdited,
-                        );
-                      },
-                    );
-                  },
-                ),
+      future: user,
+      builder: (context, snapshot) {
+        if (snapshot.hasData && canEdit(snapshot.data)) {
+          return Container(
+            padding: const EdgeInsets.symmetric(vertical: 32.0),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.grey[700], width: 0.8),
+                borderRadius: BorderRadius.all(Radius.circular(30)),
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: Offset(0, 0))
+                ],
               ),
-            );
-          } else {
-            return Container();
-          }
-        });
+              child: IconButton(
+                icon: Icon(Icons.edit, color: Colors.grey[700]),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AddEvent(
+                        user: snapshot.data,
+                        eventToBeEdited: eventTobeEdited,
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          );
+        } else {
+          return Container();
+        }
+      },
+    );
   }
 }

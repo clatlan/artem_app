@@ -6,6 +6,6 @@ class CrousEntry {
   CrousEntry({this.id, this.title, this.body});
 
   factory CrousEntry.fromJson(Map<String, dynamic> json) {
-    return CrousEntry(id: json['id'], title: json['title'], body: json['body']);
+    return CrousEntry(id: json['id'], title: json['entry_title'], body: json['entry_text']);
   }
 }

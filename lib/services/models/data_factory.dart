@@ -47,7 +47,7 @@ class DataFactory {
   Future<List<CrousEntry>> fetchCrousEntries() async {
 
     final response = await http.get(
-      globals.endpoint + '/api/v1/events',
+      globals.endpoint + '/api/v1/crous_entries',
       headers: {'Authorization': auth.jwt()},
     );
 
