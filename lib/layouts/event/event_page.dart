@@ -11,18 +11,24 @@ class EventPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-      children: <Widget>[Calendar(), AddButton()],
+      children: <Widget>[Calendar(), Carousel(), AddButton()],
     );
   }
 }
 
+class Carousel extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+return Container();
+  }
+}
+
+
 class AddButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final dataFactory = DataFactory();
-    final authService = AuthService();
 
-    final Future<User> user = dataFactory.fetchUser(authService.currentUser());
+    final Future<User> user = DataFactory().fetchUser(AuthService().currentUser());
     return FutureBuilder<User>(
       future: user,
       builder: (context, snapshot) {
@@ -35,7 +41,7 @@ class AddButton extends StatelessWidget {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
-                    return AddEvent();
+                    return AddEvent(user: snapshot.data);
                   },
                 );
               },

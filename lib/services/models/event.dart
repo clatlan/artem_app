@@ -1,11 +1,14 @@
 import 'package:artem_app/services/models/union.dart';
+import 'dart:io';
 
 class Event {
   final int id;
   final String name;
   final DateTime timeStart;
   final DateTime timeEnd;
-
+  final String description;
+  final String place;
+  final File image;
   final Union union;
 
   Event({
@@ -13,6 +16,9 @@ class Event {
     this.name,
     this.timeStart,
     this.timeEnd,
+    this.description,
+    this.place,
+    this.image,
     this.union,
   });
 

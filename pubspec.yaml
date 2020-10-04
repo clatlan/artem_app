@@ -27,7 +27,10 @@ dependencies:
   intl: ^0.15.8
   image_picker_modern: ^0.4.12+2
   fancy_dialog: ^1.0.1
-  dropdown_formfield: ^0.1.1
+ # dropdown_formfield: ^0.1.1
+  path_provider: ^1.6.9
+  photo_view: ^0.9.2
+  carousel_slider: ^2.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -37,7 +40,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_datetime_picker: 1.2.5
+  flutter_datetime_picker: # 1.2.5
+    git:
+      url: https://github.com/derohimat/flutter_datetime_picker.git
 
 
 # For information on the generic Dart part of this file, see the
@@ -71,6 +76,11 @@ flutter:
     - assets/images/VerriereArtem5mod.jpg
     - assets/images/VerriereArtem8.jpg
     - assets/images/VerriereArtem9.jpg
+    - assets/images_test/
+    - assets/images_test/interpromo2018.jpg
+    - assets/images_test/24hdeStan.png
+    - assets/images_test/Anominous.jpg
+    - assets/images_test/BDE.png
 
 
 
