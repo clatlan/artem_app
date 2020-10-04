@@ -112,4 +112,15 @@ class DataFactory {
     }
   }
 
+  createOrUpdateEvent(Event event) async {
+    print(event.toJson().toString());
+    final response = await http.post(
+      globals.endpoint + '/api/v1/events',
+      headers: {'Authorization': auth.jwt()},
+      body: {event: event.toJson()}.toString(),
+    );
+
+    return response.statusCode;
+  }
+
 }

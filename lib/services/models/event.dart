@@ -31,4 +31,16 @@ class Event {
         union: Union.fromJson(json['union'])
     );
   }
+
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> json = Map<String, dynamic>();
+    json['id'] = this.id;
+    json['name'] = this.name;
+    json['time_start'] = this.timeStart;
+    json['time_end'] = this.timeEnd;
+    json['union_id'] = this.union.id;
+
+    return json;
+  }
+
 }

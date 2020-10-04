@@ -26,11 +26,21 @@ class Union {
   });
 
   factory Union.fromJson(Map<String, dynamic> json) {
+    List<User> unionMembers = [];
+    if (json.containsKey('members')) {
+      var list = json['members'];
+      print(list);
+      for (var i = 0; i < list.length; i++) {
+        unionMembers.add(User.fromJson(list[i]));
+      }
+    }
 
     return Union(
       id: json['id'],
       name: json['name'],
-      school: School.fromJson(json['school'])
+      school: School.fromJson(json['school']),
+      members: unionMembers
+
     );
   }
 //  String fullName() {

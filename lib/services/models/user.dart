@@ -20,6 +20,14 @@ class User {
       this.school,
       this.roles});
 
+  factory User.bareUserFromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['id'],
+      firstName: json['first_name'],
+      lastName: json['last_name'],
+    );
+  }
+
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
         id: json['id'],

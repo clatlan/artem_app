@@ -1,3 +1,4 @@
+import 'package:artem_app/services/models/data_factory.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:io';
@@ -30,6 +31,7 @@ class _AddEventState extends State<AddEvent> {
   String description;
 
   Event event;
+  var datafactory = DataFactory();
 
   void getPickedImage(pickedImage) {
     image = pickedImage;
@@ -182,7 +184,8 @@ class _AddEventState extends State<AddEvent> {
                         ),
                         labelText: "Description",
                         alignLabelWithHint: true,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: 10.0, vertical: 10),
                         border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.blue)),
                       ),
@@ -219,15 +222,16 @@ class _AddEventState extends State<AddEvent> {
                 ),
                 color: Colors.blue,
                 onPressed: () {
-                  event = Event(
-                    union: union,
-                    name: title,
-                    timeStart: startDate,
-                    timeEnd: endDate,
-                    place: place,
-                    description: description,
-                    image: image,
-                  );
+                  print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk");
+                  this.datafactory.createOrUpdateEvent(Event(
+                        union: union,
+                        name: title,
+                        timeStart: startDate,
+                        timeEnd: endDate,
+                        place: place,
+                        description: description,
+                        image: image,
+                      ));
                 },
               ),
             ),
