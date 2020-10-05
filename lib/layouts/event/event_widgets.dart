@@ -69,7 +69,7 @@ class EventPreview extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(24.0),
                         child: Text(
-                          event.name,
+                          event.name ?? "Aucun nom défini.",
                           style: TextStyle(
                               fontSize: 22, fontWeight: FontWeight.bold),
                         ),
@@ -85,7 +85,7 @@ class EventPreview extends StatelessWidget {
                               ? Text(
                                   DateFormat.yMMMMd("fr_FR")
                                       .format(event.timeStart),
-                                  style: TextStyle(fontSize: 16))
+                                  style: TextStyle(fontSize: 15))
                               : Text("date à définir"),
                           Spacer(),
                           Icon(
@@ -93,8 +93,8 @@ class EventPreview extends StatelessWidget {
                             color: Colors.pink,
                           ),
                           Text(
-                            event.place,
-                            style: TextStyle(fontSize: 16),
+                            event.place ?? "Aucun lieu défini.",
+                            style: TextStyle(fontSize: 15),
                           ),
                           Spacer(),
                         ],
@@ -120,7 +120,8 @@ class EventPreview extends StatelessWidget {
                             textAlign: TextAlign.justify,
                             maxLines: 6,
                             text: TextSpan(
-                                text: event.description,
+                                text:
+                                    event.description ?? "Aucune description.",
                                 style: TextStyle(fontSize: 16)),
                           ),
                         ),
@@ -152,32 +153,34 @@ class EventWidget extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 24.0),
         child: Center(
             child: Text(
-          event.name,
+          event.name ?? "Aucun nom défini.",
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         )),
       ),
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
-        child: Center(
-          child: Row(
-            children: <Widget>[
-              Icon(
-                Icons.event,
-                color: Colors.pink,
-                size: 24,
-              ),
-              Text(
-                DateFormat.yMMMMd("fr_FR").format(event.timeStart),
-                style: TextStyle(fontSize: 20),
-              ),
-              Spacer(),
-              Icon(Icons.location_on, color: Colors.pink, size: 24),
-              Text(
-                event.place,
-                style: TextStyle(fontSize: 20),
-              ),
-            ],
-          ),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          children: <Widget>[
+            Spacer(),
+            Icon(
+              Icons.event,
+              color: Colors.pink,
+              size: 24,
+            ),
+            (event.timeStart != null)
+                ? Text(
+                DateFormat.yMMMMd("fr_FR")
+                    .format(event.timeStart),
+                style: TextStyle(fontSize: 18))
+                : Text("date à définir"),
+            Spacer(),
+            Icon(Icons.location_on, color: Colors.pink, size: 24),
+            Text(
+              event.place ?? "Aucun lieu défini.",
+              style: TextStyle(fontSize: 18),
+            ),
+            Spacer(),
+          ],
         ),
       ),
       Padding(
@@ -224,7 +227,7 @@ class EventWidget extends StatelessWidget {
                             )
                           : Center(
                               child: Text(
-                                event.union.name,
+                                event.union.name ?? "Association non précisée.",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -255,7 +258,7 @@ class EventWidget extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: SelectableText(
-            event.description,
+            event.description ?? "Aucune description",
             textAlign: TextAlign.justify,
             style: TextStyle(fontSize: 16),
           ),

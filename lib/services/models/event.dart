@@ -1,5 +1,6 @@
 import 'package:artem_app/services/models/union.dart';
 import 'dart:io';
+import 'package:flutter/material.dart';
 
 class Event {
   final int id;
@@ -23,12 +24,20 @@ class Event {
   });
 
   factory Event.fromJson(Map<String, dynamic> json) {
+    Image img;
+
+    if (json['image_picture'] != null) {
+      img = Image.network(json['image_picture']);
+    }
     return Event(
-        id: json['id'],
-        name: json['name'],
-        timeStart: DateTime.parse(json['time_start']),
-        timeEnd: DateTime.parse(json['time_end']),
-        union: Union.fromJson(json['union'])
+      id: json['id'],
+      name: json['name'],
+      timeStart: DateTime.parse(json['time_start']),
+      timeEnd: DateTime.parse(json['time_end']),
+      union: Union.fromJson(json['union']),
+      description: json['description'],
+      place: json['place'],
+//      image: img,
     );
   }
 

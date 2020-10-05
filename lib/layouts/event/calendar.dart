@@ -86,8 +86,6 @@ class _MyCalendarState extends State<Calendar> {
           } else {
             formattedEvents = Map<DateTime, List<dynamic>>.from({});
           }
-          ;
-
           return CalendarCarousel(
             locale: 'fr_FR',
             height: MediaQuery.of(context).size.height * 0.5,
@@ -127,73 +125,6 @@ class _MyCalendarState extends State<Calendar> {
               );
             }, //             markedDatesMap: formattedEvents,
           );
-
-//          return TableCalendar(
-//            locale: 'fr_FR',
-//            events: Map<DateTime, List<dynamic>>.from(formattedEvents),
-//            calendarController: _calendarController,
-//            holidays: _holidays,
-//            startingDayOfWeek: StartingDayOfWeek.monday,
-//            availableGestures: AvailableGestures.none,
-//            availableCalendarFormats: const {CalendarFormat.month: 'Month'},
-//            calendarStyle: CalendarStyle(
-//              weekdayStyle: TextStyle(color: Colors.blue),
-//              weekendStyle: TextStyle(color: Colors.pink),
-//              outsideStyle: TextStyle(color: Colors.grey),
-//              unavailableStyle: TextStyle(color: Colors.yellow),
-//              outsideWeekendStyle: TextStyle(color: Colors.grey),
-//            ),
-//            daysOfWeekStyle: DaysOfWeekStyle(
-////        dowTextBuilder: (date, locale) {
-////          return DateFormat.E(locale)
-////              .format(date)
-////              .substring(0, 3)
-////              .toUpperCase();
-////        },
-//              weekdayStyle: TextStyle(color: Colors.blue),
-//              weekendStyle: TextStyle(color: Colors.pink),
-//            ),
-//            headerVisible: true,
-//            builders: CalendarBuilders(
-//              markersBuilder: (context, date, events, holidays) {
-//                return [
-//                  Container(
-//                    decoration: new BoxDecoration(
-//                      color: Colors.black,
-//                      shape: BoxShape.circle,
-//                    ),
-//                    margin: const EdgeInsets.all(4.0),
-//                    width: 4,
-//                    height: 4,
-//                  )
-//                ];
-//              },
-//              selectedDayBuilder: (context, date, _) {
-//                return Container(
-//                  decoration: new BoxDecoration(
-//                    color: Colors.pink,
-//                    shape: BoxShape.circle,
-//                  ),
-//                  margin: const EdgeInsets.all(4.0),
-//                  width: 100,
-//                  height: 100,
-//                  child: Center(
-//                    child: Text(
-//                      '${date.day}',
-//                      style: TextStyle(
-//                        fontSize: 16.0,
-//                        color: Colors.white,
-//                      ),
-//                    ),
-//                  ),
-//                );
-//              },
-//            ),
-//            onDaySelected: (_, events) {
-//              _onDaySelected(events);
-//            },
-//            onVisibleDaysChanged: null,
-//          );
         });
   }
 
@@ -218,14 +149,6 @@ class _MyCalendarState extends State<Calendar> {
     );
   }
 }
-
-//final Map<DateTime, List> _selectedDay = {
-//  DateTime(2019, 11, 16): ['Sarass'],
-//  DateTime(2019, 11, 5): ['Selected Day in the calendar!'],
-//  DateTime(2019, 11, 22): ['Selected Day in the calendar!'],
-//  DateTime(2019, 12, 24): ['Selected Day in the calendar!'],
-//  DateTime(2019, 11, 26): ['Selected Day in the calendar!'],
-//};
 
 // Example holidays
 final Map<DateTime, List> _holidays = {

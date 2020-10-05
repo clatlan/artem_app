@@ -1,7 +1,6 @@
 import 'package:artem_app/layouts/common/background.dart';
 import 'package:artem_app/layouts/common/loader.dart';
 import 'package:artem_app/services/models/data_factory.dart';
-import 'package:artem_app/services/models/event.dart';
 import 'package:artem_app/services/models/union.dart';
 import 'package:artem_app/services/models/user.dart';
 import 'package:flutter/material.dart';

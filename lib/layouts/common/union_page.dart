@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:photo_view/photo_view.dart';
-
 import './union_members_carousel.dart';
 import 'edit_union.dart';
 import '../../services/models/union.dart';
@@ -55,7 +53,7 @@ class UnionPage extends StatelessWidget {
                       child: FittedBox(
                         fit: BoxFit.fitWidth,
                         child: Text(
-                          union.name,
+                          union.name ?? "Aucun nom défini.",
                           style: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.black),
                         ),
@@ -89,7 +87,7 @@ class UnionPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: SelectableText(
-            union.description,
+            union.description ?? "Aucune description définie.",
             textAlign: TextAlign.justify,
             style: TextStyle(fontSize: 16),
           ),
