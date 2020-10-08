@@ -1,10 +1,15 @@
+import 'package:flutter/material.dart';
+import 'dart:ui';
+
 import 'package:artem_app/layouts/common/background.dart';
 import 'package:artem_app/layouts/common/loader.dart';
 import 'package:artem_app/services/models/data_factory.dart';
 import 'package:artem_app/services/models/union.dart';
 import 'package:artem_app/services/models/user.dart';
-import 'package:flutter/material.dart';
-import 'dart:ui';
+
+import 'package:artem_app/layouts/common/union_page.dart';
+import 'package:artem_app/layouts/profile/profile_widget.dart';
+import 'package:artem_app/custom_flutter/custom_dialog.dart' as customDialog;
 
 class SearchWidget extends StatelessWidget {
   @override
@@ -24,26 +29,33 @@ class CardData {
   final image;
   final title;
   final text;
-  CardData({Key key, this.image, this.title, this.text});
+  String type;
 
-  factory CardData.fromUser (User user){
-    return CardData(image: user.school.image(), title: user.firstName + ' ' + user.lastName,text : '' );
-  }
+  CardData({Key key, this.image, this.title, this.text, this.type});
 
-  factory CardData.detectType (data) {
+  factory CardData.detectType(data) {
     if (data.runtimeType == User) {
       return CardData.fromUser(data);
-    }
-    else {
+    } else {
       return CardData.fromUnion(data);
     }
-
   }
 
-  factory CardData.fromUnion (Union union) {
-    return CardData(image: union.school.image(), title: union.name, text: '');
+  factory CardData.fromUser(User user) {
+    return CardData(
+        image: user.school.image(),
+        title: user.firstName + ' ' + user.lastName,
+        type: 'User',
+        text: '');
   }
 
+  factory CardData.fromUnion(Union union) {
+    return CardData(
+        image: union.school.image(),
+        title: union.name,
+        type: 'Union',
+        text: '');
+  }
 }
 
 class ForeGroundState extends State<ForeGround> {
@@ -57,9 +69,9 @@ class ForeGroundState extends State<ForeGround> {
 
   Function selectButtonOfIndexCallback(index) {
     return (() => setState(() {
-      this.selectedIndex = index;
-      needsReload = true;
-    }));
+          this.selectedIndex = index;
+          needsReload = true;
+        }));
   }
 
   @override
@@ -67,18 +79,17 @@ class ForeGroundState extends State<ForeGround> {
     super.initState();
     searchText.addListener(() {
       if (searchText.text != loadedTextQuery)
-        setState(() => {
-          needsReload = true
-        });
+        setState(() => {needsReload = true});
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
     if (needsReload) {
-      print(selectedIndex);
-      data = [dataFactory.fetchUsers, dataFactory.fetchUnions][this.selectedIndex](startsWith: searchText.text);
+      data = [
+        dataFactory.fetchUsers,
+        dataFactory.fetchUnions
+      ][this.selectedIndex](startsWith: searchText.text);
 
       finishedLoading = false;
       data.whenComplete(() {
@@ -95,7 +106,10 @@ class ForeGroundState extends State<ForeGround> {
           margin: EdgeInsets.all(20),
           child: SearchBar(searchText: searchText),
         ),
-        SearchSelectType(selectButtonOfIndexCallback: this.selectButtonOfIndexCallback, selectedButton: this.selectedIndex,),
+        SearchSelectType(
+          selectButtonOfIndexCallback: this.selectButtonOfIndexCallback,
+          selectedButton: this.selectedIndex,
+        ),
         SearchResult(data: data, finishedLoading: this.finishedLoading)
       ],
     );
@@ -127,8 +141,7 @@ class SearchBar extends StatelessWidget {
               filled: true,
               fillColor: Color(0xffffffff),
               hintText: "Etudiants, Associations ou évènements...",
-              hintStyle:
-                  TextStyle(color: Colors.pink.withOpacity(0.6)),
+              hintStyle: TextStyle(color: Colors.pink.withOpacity(0.6)),
               prefixIcon: Icon(Icons.search),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(25.0)),
@@ -186,22 +199,20 @@ class ButtonSelectType extends StatelessWidget {
 }
 
 class SearchSelectType extends StatefulWidget {
-
   final int selectedButton;
-  Function selectButtonOfIndexCallback;
+  final Function selectButtonOfIndexCallback;
 
-  SearchSelectType({Key key, @required this.selectedButton, @required this.selectButtonOfIndexCallback})
+  SearchSelectType(
+      {Key key,
+      @required this.selectedButton,
+      @required this.selectButtonOfIndexCallback})
       : super(key: key);
-
 
   @override
   _SearchSelectTypeState createState() => _SearchSelectTypeState();
 }
 
 class _SearchSelectTypeState extends State<SearchSelectType> {
-
-
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -227,7 +238,7 @@ class _SearchSelectTypeState extends State<SearchSelectType> {
 
 class SearchResult extends StatelessWidget {
   final Future<List> data;
-  bool finishedLoading;
+  final bool finishedLoading;
 
   SearchResult({Key key, @required this.data, @required this.finishedLoading})
       : super(key: key);
@@ -243,9 +254,10 @@ class SearchResult extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             itemCount: snapshot.data.length,
             itemBuilder: (BuildContext context, int index) {
-              var cardData = CardData.detectType(snapshot.data[index]);
-              return ResultEntry(data: cardData);
-                },
+//              CardData cardData = CardData.detectType(snapshot.data[index]);
+//              return ResultEntry(cardData: cardData);
+              return ResultEntry(data: snapshot.data[index]);
+            },
             separatorBuilder: (BuildContext context, int index) =>
                 const Divider(),
           ));
@@ -260,17 +272,31 @@ class SearchResult extends StatelessWidget {
 }
 
 class ResultEntry extends StatelessWidget {
-  final CardData data;
+  final data;
 
   ResultEntry({Key key, @required this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    CardData cardData = CardData.detectType(data);
     return Card(
       child: InkWell(
         splashColor: Colors.blue.withAlpha(30),
         onTap: () {
-          print('Card tapped.');
+          if (cardData.type == 'User') {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return ProfileDialog(user: data);
+                });
+          } else if (cardData.type == 'Union') {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return UnionPage(union: data);
+              },
+            );
+          }
         },
         child: Container(
           padding: EdgeInsets.all(10),
@@ -279,7 +305,7 @@ class ResultEntry extends StatelessWidget {
           alignment: Alignment.topCenter,
           child: Row(
             children: <Widget>[
-              Center(child: data.image),
+              Center(child: cardData.image),
               Spacer(flex: 1),
               Expanded(
                   flex: 10,
@@ -289,12 +315,12 @@ class ResultEntry extends StatelessWidget {
                     children: <Widget>[
                       Padding(
                           padding: EdgeInsets.only(bottom: 20),
-                          child: Text(data.title,
+                          child: Text(cardData.title,
                               style: TextStyle(
                                   fontFamily: 'Open Sans',
                                   fontWeight: FontWeight.w600,
                                   fontSize: 17))),
-                      Text(data.text)
+                      Text(cardData.text)
                     ],
                   ))
             ],

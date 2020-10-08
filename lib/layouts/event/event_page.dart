@@ -11,7 +11,51 @@ import './calendar.dart';
 import 'package:artem_app/layouts/event/event_widgets.dart';
 import 'add_event_page.dart';
 
-class EventPage extends StatelessWidget {
+//List<Event> sortEvent(List<Event> events) {
+//    events.sort((eventA, eventB) {
+//    return eventA.timeStart.compareTo(eventB.timeStart);
+//  });
+//    return events;
+//}
+//
+//List<Event> prepareEventsList(List<Event> events) {
+//  Event todayEvent = Event(name: "todayEvent", timeStart: DateTime.now());
+//  events.add(todayEvent);
+//  events = sortEvent(events);
+//  int indexToCut = events.indexOf(todayEvent);
+//
+////  for (int i = 0; i < events.length; i++) {
+////    if (events[i] == todayEvent) {
+////      indexToCut = i;
+////    }
+////  }
+//  return events.sublist(indexToCut + 1, events.length);
+//}
+
+class EventPage extends StatefulWidget {
+  @override
+  _EventPageState createState() => _EventPageState();
+}
+
+class _EventPageState extends State<EventPage> {
+  List<Event> eventList;
+  Event selectedEvent;
+
+  Carousel carousel;
+
+  void initCarousel() {
+    carousel = new Carousel(events: eventList);
+  }
+
+  void jumpToEvent(Event event) {
+    for (int i = 0; i < eventList.length; i++) {
+      if (event.id == eventList[i].id) {
+        print("hey page controller");
+        carousel.jumpToPage(i);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final Future<List<Event>> _events = DataFactory().fetchEvents();
@@ -19,6 +63,8 @@ class EventPage extends StatelessWidget {
       future: _events,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
+          eventList = snapshot.data;
+          initCarousel();
           return Stack(
             children: <Widget>[
               Padding(
@@ -26,23 +72,23 @@ class EventPage extends StatelessWidget {
                 child: Column(
 //                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    Expanded(flex: 2, child: Calendar()),
+                    Expanded(
+                      flex: 2,
+                      child: MyCalendar(
+                          events: eventList, jumpToEvent: jumpToEvent),
+                    ),
                     Expanded(
                       flex: 1,
 //                          height: MediaQuery.of(context).size.height * 0.3,
-                      child: Carousel(
-                        events: snapshot.data,
-                      ),
+                      child: carousel,
                     ),
-//                    SizedBox(height: 120),
+                    SizedBox(height: 50),
                   ],
                 ),
               ),
-              Positioned(bottom: 15, right: 20,
-                  child: AddButton())
+              Positioned(bottom: 15, right: 20, child: AddButton())
             ],
           );
-
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         } else {
@@ -54,17 +100,25 @@ class EventPage extends StatelessWidget {
 }
 
 class Carousel extends StatelessWidget {
+  final CarouselController carouselController = CarouselController();
   final List<Event> events;
 
   Carousel({Key key, @required this.events});
 
+  void jumpToPage(int page) {
+    print(page);
+    carouselController.animateToPage(page,
+        duration: Duration(milliseconds: 1200), curve: Curves.linearToEaseOut);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.4,
+      height: MediaQuery.of(context).size.height * 0.5,
       child: CarouselSlider(
+          carouselController: carouselController,
           options: CarouselOptions(
-            height: MediaQuery.of(context).size.height * 0.8,
+            height: MediaQuery.of(context).size.height * 0.9,
             enlargeCenterPage: true,
             viewportFraction: 0.8,
           ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:artem_app/custom_flutter/custom_dialog.dart' as customDialog;
 
 import '../../services/models/user.dart';
+import 'package:artem_app/layouts/common/union_page.dart';
 
 class ProfileWidget extends StatelessWidget {
   final User user;
@@ -30,10 +31,10 @@ class ProfileWidget extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
-            Text(user.firstName + " " + user.lastName,
+            Text((user.firstName ?? "prénom") + " " + (user.lastName ?? "nom"),
                 style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
-            Text(user.email,
+            Text(user.email ?? "Aucun mail à afficher.",
                 style:
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.pink)),
             //emailLabel,
@@ -47,9 +48,9 @@ class ProfileWidget extends StatelessWidget {
                 color: Colors.pink,
               ),
             ),
-            profileInfo("École", user.school.name),
-            profileInfo("Promotion d'entrée", user.yearEntered.toString()),
-            associationInfo(user),
+            profileInfo("École", user.school?.name ?? " "),
+            profileInfo("Promotion d'entrée", user.yearEntered?.toString() ?? " "),
+            associationInfo(user, context),
           ],
         ),
       ],
@@ -82,12 +83,12 @@ class ProfileWidget extends StatelessWidget {
     );
   }
 
-  Widget associationInfo(User user) {
+  Widget associationInfo(User user, BuildContext context) {
     final plural = user.roles.length > 1 ? 1 : 0;
     final label = "Association" + "s" * (plural);
     final content = user.unionsList();
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical :16.0),
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Row(
         children: <Widget>[
           Text(
@@ -103,11 +104,46 @@ class ProfileWidget extends StatelessWidget {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                children: content.map((unionName) {
+                children: content.map((union) {
                   return Padding(
                     padding: EdgeInsets.only(right: 8),
-                    child: Text(
-                      unionName,
+                    child: union.logo != null
+                        ? Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(200)),
+                            border: Border.all(width: 0.2, color: Colors.grey),
+                          ),
+                          child: Material(
+                            borderRadius: BorderRadius.all(Radius.circular(200)),
+                            elevation: 4,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(200),
+                              ),
+                              child: InkWell(
+                                highlightColor: Colors.transparent,
+                                splashColor: Colors.transparent,
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return UnionPage(union: union);
+                                    },
+                                  );
+                                },
+                                child: Image.asset(
+                                  'assets/images_test/BDE.png',
+                                  fit: BoxFit.fill,
+                                )
+
+                              ),
+                            ),
+                          ),
+                        )
+                    : Text(
+                      union.name,
                       style: TextStyle(
                         color: Colors.blue,
                         fontWeight: FontWeight.bold,
@@ -132,9 +168,12 @@ class ProfileDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return customDialog.AlertDialog(
-      content: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8,
-          child: ProfileWidget(user: user)),
+      content: Container(
+        width: MediaQuery.of(context).size.width * 0.8,
+        height: MediaQuery.of(context).size.height * 0.5,
+        child: SingleChildScrollView(child: ProfileWidget(user: user)),
+      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
     );
   }
 }

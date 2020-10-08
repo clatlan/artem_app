@@ -6,6 +6,7 @@ import 'package:carousel_slider/carousel_options.dart';
 import 'package:artem_app/layouts/event/event_widgets.dart';
 import 'package:artem_app/layouts/profile/my_profile.dart';
 import 'package:artem_app/layouts/common/background.dart';
+import 'package:artem_app/layouts/common/loader.dart';
 
 import '../../services/models/event.dart';
 import '../../services/models/union.dart';
@@ -254,6 +255,9 @@ Pauline & Ben
           );
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
+        }
+        else{
+          return Loader();
         }
       },
     );

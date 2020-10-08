@@ -66,8 +66,9 @@ class _AddEventState extends State<AddEvent> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
-          "Créer un évènement",
+        title: Text(widget.eventToBeEdited != null
+          ? "Modifier l'évènement"
+          :"Créer un évènement",
 //          style: TextStyle(fontSize: 25),
         ),
       ),
@@ -222,7 +223,6 @@ class _AddEventState extends State<AddEvent> {
                 ),
                 color: Colors.blue,
                 onPressed: () {
-                  print("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOk");
                   this.datafactory.createOrUpdateEvent(Event(
                         union: union,
                         name: title,

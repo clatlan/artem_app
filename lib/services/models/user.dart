@@ -1,5 +1,6 @@
 import './school.dart';
 import './role.dart';
+import './union.dart';
 
 class User {
   final int id;
@@ -47,10 +48,10 @@ class User {
     return unions.join(', ');
   }
 
-  List<String> unionsList() {
-    final List<String> unions = [];
+  List<Union> unionsList() {
+    final List<Union> unions = [];
     for (var i = 0; i < this.roles.length; i++) {
-      unions.add(roles[i].union.name);
+      unions.add(roles[i].union);
     }
 //    return unions.join(', ');
     return unions;

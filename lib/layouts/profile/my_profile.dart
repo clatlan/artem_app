@@ -45,7 +45,7 @@ class _MyProfileState extends State<MyProfile> {
                       child: ProfileWidget(user: snapshot.data),
                     ),
                     SizedBox(height: 20),
-                    ProfileInfoUpdateButton(user: snapshot.data),
+//                    ProfileInfoUpdateButton(user: snapshot.data),
                     ProfileInfoDeleteButton(),
                   ],
                 ),

@@ -48,10 +48,10 @@ class DataFactory {
       throw Exception(globals.standardErrorMessage);
     }
   }
-  Future <List> searchAll() {}
+
+  Future<List> searchAll() {}
 
   Future<List<User>> fetchUsers({startsWith = '', pageNumber = 0}) async {
-    print(auth.jwt());
     final response = await http.get(
       globals.endpoint +
           '/api/v1/users?starts_with=' +
@@ -93,7 +93,7 @@ class DataFactory {
     }
   }
 
-  Future<List<Event>> fetchEvents() async {
+  Future<List<Event>> fetchEvents({onlyFutureEvents = false}) async {
     final response = await http.get(
       globals.endpoint + '/api/v1/events',
       headers: {'Authorization': auth.jwt()},
@@ -105,7 +105,25 @@ class DataFactory {
       for (var i = 0; i < list.length; i++) {
         events.add(Event.fromJson(list[i]['event']));
       }
-      return events;
+      if (onlyFutureEvents) {
+        Event todayEvent = Event(name: "Today is today");
+        events.add(todayEvent);
+        events.sort((eventA, eventB) {
+          return eventA.timeStart.compareTo(eventB.timeStart);
+        });
+        int cuttingIndex = 0;
+        for (int i = 0; i < events.length; i++){
+          if (events[i].id == todayEvent.id){
+            cuttingIndex = i;
+          }
+        }
+        return events.sublist(cuttingIndex + 1, events.length);
+      } else {
+        events.sort((eventA, eventB) {
+          return eventA.timeStart.compareTo(eventB.timeStart);
+        });
+        return events;
+      }
     } else {
       // If that call was not successful, throw an error.
       throw Exception(globals.standardErrorMessage);
@@ -113,7 +131,6 @@ class DataFactory {
   }
 
   createOrUpdateEvent(Event event) async {
-    print(event.toJson().toString());
     final response = await http.post(
       globals.endpoint + '/api/v1/events',
       headers: {'Authorization': auth.jwt()},
@@ -122,5 +139,4 @@ class DataFactory {
 
     return response.statusCode;
   }
-
 }

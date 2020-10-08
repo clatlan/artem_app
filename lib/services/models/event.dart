@@ -1,8 +1,9 @@
 import 'package:artem_app/services/models/union.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar_carousel/classes/event.dart';
 
-class Event {
+class Event extends EventInterface{
   final int id;
   final String name;
   final DateTime timeStart;
@@ -22,6 +23,28 @@ class Event {
     this.image,
     this.union,
   });
+
+  DateTime getDate() {
+    return this.timeStart;
+  }
+
+  String getTitle() {
+    return this.name;
+  }
+  Icon getIcon() {
+    return Icon(Icons.event);
+  }
+
+  Widget getDot(){
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(9.0),
+      child: Container(
+        height: 5,
+        width: 5,
+        color: Color(0xFF0288D1),
+      ),
+    );
+  }
 
   factory Event.fromJson(Map<String, dynamic> json) {
     Image img;

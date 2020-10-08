@@ -40,7 +40,7 @@ class UnionMembersCarousel extends StatelessWidget {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return ProfileWidget(user: member);
+                  return ProfileDialog(user: member);
                 },
               );
             },
@@ -48,8 +48,7 @@ class UnionMembersCarousel extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10))
-                ),
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
                 child: Column(
                   children: <Widget>[
                     Icon(
@@ -83,10 +82,12 @@ class UnionMembersCarousel extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.2,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        child: Row(
-            children: union.members.map((member) {
-          return miniMemberCard(context, member);
-        }).toList()),
+        child: union.members != null
+            ? Row(
+                children: union.members.map((member) {
+                return miniMemberCard(context, member);
+              }).toList())
+            : Container(),
       ),
     );
   }
